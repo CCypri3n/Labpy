@@ -47,7 +47,7 @@ def display_maze(maze: np.array, cell_size: int):
     """
     #print(f"Cell size: {cell_size}, Maze size: {len(maze)}x{len(maze[0])}, Maze: {maze}")
     for y, row in enumerate(maze):
-        p#rint(f"Row {y}: {row}")
+        #print(f"Row {y}: {row}")
         for x, cell in enumerate(row):
             #print(f"Cell {x}: {cell}")
             rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
@@ -82,14 +82,15 @@ def display_solution(solution: np.array, cell_size: int):
             elif cell == 2:  # End
                 game.draw.rect(win, (255, 0, 0), rect)
 
-def display_player(player_pos: tuple, cell_size: int):
+def display_player(player_pos: dict, cell_size: int):
     """_summary_
 
     Args:
-        player_pos (tuple): The position of the player in the maze.
+        player_pos (dict): The position of the player in the maze.
         cell_size (int): The size of each cell in the maze.
     """
-    x, y = player_pos
+    x = player_pos["x"]
+    y = player_pos["y"]
     rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
     game.draw.circle(win, (0, 0, 255), rect.center, cell_size/3)  # Draw player in blue
     #print(f"Player position: {player_pos}, Rect: {rect}")

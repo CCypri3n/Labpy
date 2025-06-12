@@ -6,16 +6,33 @@ import Player as Player
 import MazeSolver as MazeSol
 import MazeGenerator as MazeGen
 
+maze10 = np.array([
+    [1, 3, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 1],
+    [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+    [1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+    [1, 0, 1, 1, 1, 0, 1, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 2, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0, 1, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+])
+
+maze4 = np.array([[1, 3, 1, 2], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])
+
+
 def main():
     # Initialize the display
     width, height = 600, 600
     win = Display.init_display(caption="Labpy", H=height, W=width)
 
     # Create a maze
-    maze = np.array([[1, 3, 1, 2], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])#MazeGen.create_maze(20, 20)
+    maze = maze10
     cell_size = min(width // len(maze[0]), height // len(maze))
+    solutionTuple = (0, 0)
     solutionTuple = MazeSol.recursiveSolve(maze, get_start(maze))
-    P1 = False#Player.player(maze)
+    P1 = Player.player(maze)
 
     clock = game.time.Clock()
     running = True
@@ -25,7 +42,7 @@ def main():
                 running = False
         if P1: maze = P1.update()  # Update player state
         win.fill((0, 0, 0))  # Fill the screen with black
-        Display.display_maze(maze, cell_size) if not solutionTuple[0] else Display.display_solution(solutionTuple[1])
+        Display.display_maze(maze, cell_size) if not solutionTuple[0] else Display.display_solution(solutionTuple[1], cell_size)
         if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
         clock.tick(60)  # Limit to 60 FPS
@@ -43,7 +60,7 @@ def get_start(maze):
         for y, row in enumerate(maze):
             for x, cell in enumerate(row):
                 if cell == 3:
-                    position = (x, y)
+                    position = {"x":x, "y":y}
                     return position
         Exception("Start position not found in the maze")
 

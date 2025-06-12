@@ -12,7 +12,7 @@ class player():
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
                 if cell == 3:
-                    self.position = (y, x)
+                    self.position = (x, y)
                     return self.position
         Exception("Start position not found in the maze")
 
@@ -20,13 +20,8 @@ class player():
         # Implement movement logic based on direction
         pass
 
-    def draw(self):
-        # Implement drawing logic for the player
-        pass
-
     def update(self):
         self.move()  # Update player position based on input
-        self.draw() # Draw the player on the maze
 
         return self.maze
 

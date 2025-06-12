@@ -20,19 +20,22 @@ class player():
     def move(self):
         # Implement movement logic based on direction
         keys = game.key.get_pressed()
-
-        if keys[K_LEFT]:
-            if self.maze[self.position["y"]][self.position["x"]-1] != 1:
-                self.position["x"] -= 1
-        if keys[K_RIGHT]:
-            if self.maze[self.position["y"]][self.position["x"]+1] != 1:
-                self.position["x"] += 1
-        if keys[K_UP]:
-            if self.maze[self.position["y"]-1][self.position["x"]] != 1:
-                self.position["y"] -= 1
-        if keys[K_DOWN]:
-            if self.maze[self.position["y"]+1][self.position["x"]] != 1:
-                self.position["y"] += 1
+        
+        try:
+            if keys[K_LEFT]:
+                if self.maze[self.position["y"]][self.position["x"]-1] != 1:
+                    self.position["x"] -= 1
+            if keys[K_RIGHT]:
+                if self.maze[self.position["y"]][self.position["x"]+1] != 1:
+                    self.position["x"] += 1
+            if keys[K_UP]:
+                if self.maze[self.position["y"]-1][self.position["x"]] != 1:
+                    self.position["y"] -= 1
+            if keys[K_DOWN]:
+                if self.maze[self.position["y"]+1][self.position["x"]] != 1:
+                    self.position["y"] += 1
+        except Exception as e:
+            print(e)
 
     def update(self):
         self.move()  # Update player position based on input

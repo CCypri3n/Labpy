@@ -31,6 +31,7 @@ def genMaze(size, start):
     # Optionally, set entrance and exit
     maze[1][0] = 0  # Entrance
     maze[size-2][size-1] = 0  # Exit
+    maze[start["y"]][start["x"]]=3
     print(maze)
     return maze
 

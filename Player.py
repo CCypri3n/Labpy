@@ -19,13 +19,13 @@ class player():
                     return self.position
         Exception("Start position not found in the maze")
     
-    def get_start(self):
+    def get_goal(self):
         # Find the starting position in the maze
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
                 if cell == 2:
-                    self.position = {"x":x, "y":y}
-                    return self.position
+                    self.goal = {"x":x, "y":y}
+                    return self.goal
         Exception("Start position not found in the maze")
 
     def move(self):

@@ -24,11 +24,11 @@ maze4 = np.array([[1, 3, 1, 2], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])
 
 def main():
     # Initialize the display
-    width, height = 600, 600
+    width, height = 700, 700
     win = Display.init_display(caption="Labpy", H=height, W=width)
 
     # Create a maze
-    maze = MazeGen.genMaze(50, {"x": 0, "y": 25})
+    maze = MazeGen.genMaze(100, {"x": 0, "y": 25})
     cell_size = min(width // len(maze[0]), height // len(maze))
     solutionTuple = (0, 0)
     solutionTuple = MazeSol.recursiveSolve(maze, get_start(maze))
@@ -66,4 +66,6 @@ def get_start(maze):
         Exception("Start position not found in the maze")
 
 if __name__ == "__main__":
+    import sys
+    sys.setrecursionlimit(2000)
     main()

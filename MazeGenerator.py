@@ -34,6 +34,7 @@ def genMaze(size, start):
     maze[start["y"]][start["x"]]=3
     end = (random.randint(0, size), random.randint(0, size))
     maze[end[1]][end[0]]=2
+
     return maze
 
 

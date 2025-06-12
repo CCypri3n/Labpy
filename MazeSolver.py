@@ -1,6 +1,6 @@
 import numpy as np
 
-def recursiveSolve(inMaze, start={"x":0,"y":0}):
+def depthFirstSolve(inMaze, start={"x":0, "y":0}):
     #check if at arrival
     maze=inMaze.copy()
     if maze[start["y"]][start["x"]]==2:
@@ -15,7 +15,7 @@ def recursiveSolve(inMaze, start={"x":0,"y":0}):
         #check if pos above current is free and unknown
         if maze[s["y"]][s["x"]] == 0 or maze[s["y"]][s["x"]] == 2:
             #recursive call to check for free path ahead
-            isSolved, finalMaze = recursiveSolve(maze, s)
+            isSolved, finalMaze = depthFirstSolve(maze, s)
             #if winning path ahead return True
             if isSolved:
                 return (True, finalMaze)
@@ -23,21 +23,21 @@ def recursiveSolve(inMaze, start={"x":0,"y":0}):
     if start["y"] != len(maze)-1:
         s={"y": start["y"]+1,"x":start["x"]}
         if maze[s["y"]][s["x"]] == 0 or maze[s["y"]][s["x"]] == 2:
-            isSolved, finalMaze = recursiveSolve(maze, s)
+            isSolved, finalMaze = depthFirstSolve(maze, s)
             if isSolved:
                 return (True, finalMaze)
     #LEFT
     if start["x"] != 0:
         s={"y": start["y"],"x": start["x"]-1}
         if maze[s["y"]][s["x"]] == 0 or maze[s["y"]][s["x"]] == 2:
-            isSolved, finalMaze = recursiveSolve(maze, s)
+            isSolved, finalMaze = depthFirstSolve(maze, s)
             if isSolved:
                 return (True, finalMaze)
     #RIGHT
     if start["x"] != len(maze)-1:
         s={"y": start["y"],"x": start["x"]+1}
         if maze[s["y"]][s["x"]] == 0 or maze[s["y"]][s["x"]] == 2:
-            isSolved, finalMaze = recursiveSolve(maze, s)
+            isSolved, finalMaze = depthFirstSolve(maze, s)
             if isSolved:
                 return (True, finalMaze)
 

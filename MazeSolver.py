@@ -2,7 +2,6 @@ import numpy as np
 
 def recursiveSolve(maze, start=(0,0)):
     #check if at arrival
-    print(1)
     if maze[start[0]][start[1]]==2:
         return (True, maze)
     #draw path taken since not at arrival

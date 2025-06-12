@@ -45,11 +45,11 @@ def display_maze(maze: np.array, cell_size: int):
         cell_size (int): The size of each cell in the maze.
         solution (list, optional): The mazes solution. Defaults to None.
     """
-    print(f"Cell size: {cell_size}, Maze size: {len(maze)}x{len(maze[0])}, Maze: {maze}")
+    #print(f"Cell size: {cell_size}, Maze size: {len(maze)}x{len(maze[0])}, Maze: {maze}")
     for y, row in enumerate(maze):
-        print(f"Row {y}: {row}")
+        p#rint(f"Row {y}: {row}")
         for x, cell in enumerate(row):
-            print(f"Cell {x}: {cell}")
+            #print(f"Cell {x}: {cell}")
             rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
             if cell == 1:  # Wall
                 game.draw.rect(win, (0, 0, 0), rect)
@@ -67,11 +67,11 @@ def display_solution(solution: np.array, cell_size: int):
         solution (np.array): The solution path of the maze.
         cell_size (int): The size of each cell in the maze.
     """
-    print(f"Cell size: {cell_size}, Maze size: {len(solution)}x{len(solution[0])}, Maze: {solution}")
+    #print(f"Cell size: {cell_size}, Maze size: {len(solution)}x{len(solution[0])}, Maze: {solution}")
     for y, row in enumerate(solution):
-        print(f"Row {y}: {row}")
+        #print(f"Row {y}: {row}")
         for x, cell in enumerate(row):
-            print(f"Cell {x}: {cell}")
+            #print(f"Cell {x}: {cell}")
             rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
             if cell == 1:  # Wall
                 game.draw.rect(win, (0, 0, 0), rect)
@@ -92,7 +92,7 @@ def display_player(player_pos: tuple, cell_size: int):
     x, y = player_pos
     rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
     game.draw.circle(win, (0, 0, 255), rect.center, cell_size/3)  # Draw player in blue
-    print(f"Player position: {player_pos}, Rect: {rect}")
+    #print(f"Player position: {player_pos}, Rect: {rect}")
 
 if __name__ == "__main__":
     main()

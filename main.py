@@ -32,7 +32,7 @@ def main():
     cell_size = min(width // len(maze[0]), height // len(maze))
     solutionTuple = (0, 0)
     solutionTuple = MazeSol.recursiveSolve(maze, get_start(maze))
-    P1 = Player.player(maze)
+    P1 = False#Player.player(maze)
 
     clock = game.time.Clock()
     running = True

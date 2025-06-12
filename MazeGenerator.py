@@ -32,8 +32,9 @@ def genMaze(size, start):
     maze[1][0] = 0  # Entrance
     maze[size-2][size-1] = 0  # Exit
     maze[start["y"]][start["x"]]=3
+    rand_tuple = (random.randint(size), random.randint(size))
     print(maze)
-    return maze
+    return (maze, rand_tuple)
 
 
 

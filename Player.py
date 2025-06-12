@@ -18,7 +18,16 @@ class player():
 
     def move(self):
         # Implement movement logic based on direction
-        pass
+        keys = game.key.get_pressed()
+
+        if keys[K_LEFT]:
+            self.position[0] -= 1
+        if keys[K_RIGHT]:
+            self.position[0] += 1
+        if keys[K_UP]:
+            self.position[1] -= 1
+        if keys[K_DOWN]:
+            self.position[1] += 1
 
     def update(self):
         self.move()  # Update player position based on input

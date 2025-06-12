@@ -47,7 +47,7 @@ def display_maze(maze: np.array, cell_size: int):
     """
     #print(f"Cell size: {cell_size}, Maze size: {len(maze)}x{len(maze[0])}, Maze: {maze}")
     for y, row in enumerate(maze):
-        p#rint(f"Row {y}: {row}")
+        #print(f"Row {y}: {row}")
         for x, cell in enumerate(row):
             #print(f"Cell {x}: {cell}")
             rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)

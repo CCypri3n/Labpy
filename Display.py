@@ -1,13 +1,10 @@
 import pygame as game
 import numpy as np
 
-HEIGHT, WIDTH = 800, 800
+height, width = 600, 600
 
 def main():
-    WIN = game.display()
-    WIN.set_mode((WIDTH, HEIGHT))
-    WIN.set_caption("Labpy")
-    game.init()
+    win = init_display()
     clock = game.time.Clock()
 
     running = True
@@ -17,11 +14,51 @@ def main():
             if event.type == game.QUIT:
                 running = False
 
-        WIN.fill((0, 0, 0))  # Fill the screen with black
+        win.fill((0, 0, 0))  # Fill the screen with black
         game.display.flip()  # Update the display
         clock.tick(60)  # Limit to 60 FPS
 
     game.quit()
+
+def init_display(caption: str = "Labpy", H: int = height, W: int = width):
+    """_summary_
+
+    Args:
+        caption (str, optional): The caption for the pygame window. Defaults to "Labpy".
+        H (int, optional): The height of the pygame window. Defaults to HEIGHT.
+        W (int, optional): The width of the pygame window. Defaults to WIDTH.
+
+    Returns:
+        _type_: The pygame window object.
+    """
+    game.init()
+    global win
+    win = game.display.set_mode((W, H))
+    game.display.set_caption(caption)
+    return win
+
+def display_maze(maze: np.array, solution: list = None):
+    """_summary_
+
+    Args:
+        maze (np.array): The np.array representing the maze.
+        solution (list, optional): The mazes solution. Defaults to None.
+    """
+    cell_size = min(width // len(maze[0]), height // len(maze))
+    print(f"Cell size: {cell_size}, Maze size: {len(maze)}x{len(maze[0])}, Maze: {maze}")
+    for y, row in enumerate(maze):
+        print(f"Row {y}: {row}")
+        for x, cell in enumerate(row):
+            print(f"Cell {x}: {cell}")
+            rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
+            if cell == 1:  # Wall
+                game.draw.rect(win, (255, 255, 255), rect)
+            elif cell == 0:  # Path
+                game.draw.rect(win, (0, 0, 0), rect)
+            elif cell == 3:  # Start
+                game.draw.rect(win, (0, 255, 0), rect)
+            elif cell == 2:  # End
+                game.draw.rect(win, (255, 0, 0), rect)
 
 if __name__ == "__main__":
     main()
@@ -30,27 +67,3 @@ if __name__ == "__main__":
 # The window is filled with a black color each frame.
 # The code is structured to be run as a standalone script.
 # It uses the Pygame library to create a graphical window.
-
-def init_display():
-    game.init()
-    global WIN
-    WIN = game.display.set_mode((WIDTH, HEIGHT))
-    game.display.set_caption("Labpy")
-    return WIN
-
-def loop_display():
-    clock = game.time.Clock()
-    running = True
-    while running:
-        for event in game.event.get():
-            if event.type == game.QUIT:
-                running = False
-
-        WIN.fill((0, 0, 0))  # Fill the screen with black
-        game.display.flip()  # Update the display
-        clock.tick(60)  # Limit to 60 FPS
-
-    game.quit()
-
-def display_maze(maze, solution: list = None):
-    cell_size = min(WIDTH // len(maze[0]), HEIGHT // len(maze))

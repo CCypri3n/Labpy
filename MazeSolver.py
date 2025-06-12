@@ -6,7 +6,7 @@ def depthFirstSolve(inMaze, start={"x":0, "y":0}):
     if maze[start["y"]][start["x"]]==2:
         return (True, maze)
     #draw path taken since not at arrival
-    maze[start["y"]][start["x"]]=3
+    maze[start["y"]][start["x"]]=4
     ##UP
     #check if at top border
     if start["y"] != 0:
@@ -43,3 +43,7 @@ def depthFirstSolve(inMaze, start={"x":0, "y":0}):
 
     return (False, maze)
 
+def breadthFirstSolve(inMaze, start = {"x":0, "y":0}, end= {"x":1,"y":1}):
+    visited=[]
+    neighbours=[]
+    while

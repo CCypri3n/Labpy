@@ -24,19 +24,14 @@ def recursiveMazeGen(maze, start):
                 # Recursively continue from neighbor
                 recursiveMazeGen(maze, {"y": ny, "x": nx})
 
-# Usage example:
-size = 21  # Odd number for proper maze structure
-maze = np.ones((size, size), dtype=int)
+def genMaze(size, start):
+    maze = np.ones((size, size), dtype=int)
+    recursiveMazeGen(maze, start)
+    # Optionally, set entrance and exit
+    maze[1][0] = 0  # Entrance
+    maze[size-2][size-1] = 0  # Exit
 
-# Start in the top-left corner (must be odd coordinates)
-start = {"y": 1, "x": 1}
-recursiveMazeGen(maze, start)
-
-# Optionally, set entrance and exit
-maze[1][0] = 0  # Entrance
-maze[size-2][size-1] = 0  # Exit
-
-print(maze)
+    print(maze)
 
 
 

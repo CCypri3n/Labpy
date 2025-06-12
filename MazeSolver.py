@@ -1,8 +1,8 @@
 import numpy as np
 
-def recursiveSolve(maze, start={"x":0,"y":0}):
+def recursiveSolve(inMaze, start={"x":0,"y":0}):
     #check if at arrival
-    print(maze)
+    maze=inMaze.copy()
     if maze[start["y"]][start["x"]]==2:
         return (True, maze)
     #draw path taken since not at arrival

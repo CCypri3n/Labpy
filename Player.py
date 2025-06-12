@@ -7,12 +7,23 @@ class player():
         self.maze = maze
         self.position = self.get_start()  # Starting position
         self.path = []  # Path taken by the player
+        self.win = False
+        self.goal = self.get_goal()
     
     def get_start(self):
         # Find the starting position in the maze
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
                 if cell == 3:
+                    self.position = {"x":x, "y":y}
+                    return self.position
+        Exception("Start position not found in the maze")
+    
+    def get_start(self):
+        # Find the starting position in the maze
+        for y, row in enumerate(self.maze):
+            for x, cell in enumerate(row):
+                if cell == 2:
                     self.position = {"x":x, "y":y}
                     return self.position
         Exception("Start position not found in the maze")
@@ -39,6 +50,8 @@ class player():
 
     def update(self):
         self.move()  # Update player position based on input
+        if self.position == self.goal:
+            self.win = True
 
         return self.maze
 

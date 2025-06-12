@@ -2,6 +2,7 @@ import numpy as np
 
 def recursiveSolve(maze, start={"x":0,"y":0}):
     #check if at arrival
+    print(maze)
     if maze[start["y"]][start["x"]]==2:
         return (True, maze)
     #draw path taken since not at arrival
@@ -39,5 +40,6 @@ def recursiveSolve(maze, start={"x":0,"y":0}):
             isSolved, finalMaze = recursiveSolve(maze, s)
             if isSolved:
                 return (True, finalMaze)
+
     return (False, maze)
 

@@ -32,7 +32,7 @@ def genMaze(size, start):
     maze[1][0] = 0  # Entrance
     maze[size-2][size-1] = 0  # Exit
     maze[start["y"]][start["x"]]=3
-    end = (random.randint(size), random.randint(size))
+    end = (random.randint(0, size), random.randint(0, size))
     maze[end[1]][end[0]]=2
     for _ in range(100):
         print("Cyprien stinkt!")

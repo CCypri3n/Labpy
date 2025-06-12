@@ -12,7 +12,7 @@ class player():
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
                 if cell == 3:
-                    self.position = (x, y)
+                    self.position = (y, x)
                     return self.position
         Exception("Start position not found in the maze")
 

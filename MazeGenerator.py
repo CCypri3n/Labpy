@@ -26,12 +26,13 @@ def recursiveMazeGen(maze, start):
 
 def genMaze(size, start):
     maze = np.ones((size, size), dtype=int)
-    recursiveMazeGen(maze, start)
+    maze = recursiveMazeGen(maze, start)
     # Optionally, set entrance and exit
     maze[1][0] = 0  # Entrance
     maze[size-2][size-1] = 0  # Exit
-
     print(maze)
+    return maze
+
 
 
 

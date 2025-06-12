@@ -37,14 +37,14 @@ def init_display(caption: str = "Labpy", H: int = height, W: int = width):
     game.display.set_caption(caption)
     return win
 
-def display_maze(maze: np.array, solution: list = None):
+def display_maze(maze: np.array, cell_size: int, solution: list = None):
     """_summary_
 
     Args:
         maze (np.array): The np.array representing the maze.
+        cell_size (int): The size of each cell in the maze.
         solution (list, optional): The mazes solution. Defaults to None.
     """
-    cell_size = min(width // len(maze[0]), height // len(maze))
     print(f"Cell size: {cell_size}, Maze size: {len(maze)}x{len(maze[0])}, Maze: {maze}")
     for y, row in enumerate(maze):
         print(f"Row {y}: {row}")
@@ -52,13 +52,25 @@ def display_maze(maze: np.array, solution: list = None):
             print(f"Cell {x}: {cell}")
             rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
             if cell == 1:  # Wall
-                game.draw.rect(win, (255, 255, 255), rect)
-            elif cell == 0:  # Path
                 game.draw.rect(win, (0, 0, 0), rect)
+            elif cell == 0:  # Path
+                game.draw.rect(win, (255, 255, 255), rect)
             elif cell == 3:  # Start
                 game.draw.rect(win, (0, 255, 0), rect)
             elif cell == 2:  # End
                 game.draw.rect(win, (255, 0, 0), rect)
+
+def display_player(player_pos: tuple, cell_size: int):
+    """_summary_
+
+    Args:
+        player_pos (tuple): The position of the player in the maze.
+        cell_size (int): The size of each cell in the maze.
+    """
+    x, y = player_pos
+    rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
+    game.draw.rect(win, (0, 0, 255), rect)  # Draw player in blue
+    print(f"Player position: {player_pos}, Rect: {rect}")
 
 if __name__ == "__main__":
     main()

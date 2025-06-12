@@ -1,0 +1,32 @@
+import numpy as np
+import pygame as game
+
+class player():
+    def __init__(self, maze):
+        self.maze = maze
+        self.position = self.get_start()  # Starting position
+        self.path = []  # Path taken by the player
+    
+    def get_start(self):
+        # Find the starting position in the maze
+        for y, row in enumerate(self.maze):
+            for x, cell in enumerate(row):
+                if cell == 3:
+                    self.position = (x, y)
+                    return self.position
+        Exception("Start position not found in the maze")
+
+    def move(self):
+        # Implement movement logic based on direction
+        pass
+
+    def draw(self):
+        # Implement drawing logic for the player
+        pass
+
+    def update(self):
+        self.move()  # Update player position based on input
+        self.draw() # Draw the player on the maze
+
+        return self.maze
+

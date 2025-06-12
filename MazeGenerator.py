@@ -23,6 +23,7 @@ def recursiveMazeGen(maze, start):
                 maze[start["y"] + d["y"] // 2][start["x"] + d["x"] // 2] = 0
                 # Recursively continue from neighbor
                 recursiveMazeGen(maze, {"y": ny, "x": nx})
+    return maze
 
 def genMaze(size, start):
     maze = np.ones((size, size), dtype=int)
@@ -35,4 +36,4 @@ def genMaze(size, start):
 
 
 
-
+genMaze(20,{"x":0,"y":1})

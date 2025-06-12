@@ -28,7 +28,7 @@ def main():
     win = Display.init_display(caption="Labpy", H=height, W=width)
 
     # Create a maze
-    maze = maze10
+    maze = MazeGen.genMaze(50, {"x": 0, "y": 25})
     cell_size = min(width // len(maze[0]), height // len(maze))
     solutionTuple = (0, 0)
     solutionTuple = MazeSol.recursiveSolve(maze, get_start(maze))
@@ -45,7 +45,7 @@ def main():
         Display.display_maze(maze, cell_size) if not solutionTuple[0] else Display.display_solution(solutionTuple[1], cell_size)
         if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
-        clock.tick(60)  # Limit to 60 FPS
+        clock.tick(25)  # Limit to 60 FPS
 
     game.quit()
 

@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.sparse.csgraph import breadth_first_tree
 
-maze10 = np.array([
+testmaze = np.array([
     [1, 3, 1, 1, 1, 1, 1, 1, 1, 1],
     [0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 1],
@@ -100,9 +100,25 @@ def getFreeNeighbours(pos, grid):
             yield (pos[0],pos[1]+1)
             print(f"Right: {pos}")
 
+def quickestPath(breadthSearchedMaze):
+    grid=breadthSearchedMaze.copy()
+    end = getEndPos(grid)
+    if end == None:
+        raise ValueError("No end point found")
+    else:
+        curVal=0
+        curPos=end
+        while curVal != 10:
 
-# Prevent run on import
-if __file__ == "main":
-    print(breadthFirstSolve(maze10, start=(0,1)))
+
+
+def getEndPos(maze) -> tuple:
+    for y in maze:
+        for x,val in enumerate(y):
+            if val == 2:
+                return (y, x)
+    return None
+
+#print(breadthFirstSolve(testmaze, start=(0,1)))
 
 

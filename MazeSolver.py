@@ -54,7 +54,7 @@ def breadthFirstSolve(inMaze, start = (0,0)):
             if grid[curPoint[0]][curPoint[1]]==2:
                 solved=True
             else:
-                grid[curPoint[0]][curPoint[1]]=3
+                grid[curPoint[0]][curPoint[1]]=10+iterCount
             current.append([neighbour for neighbour in getFreeNeighbours(curPoint, grid)])
             current.remove(curPoint)
         if current == []:

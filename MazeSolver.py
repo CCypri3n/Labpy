@@ -84,22 +84,25 @@ def getFreeNeighbours(pos, grid):
         if grid[pos[0]-1][pos[1]] in [0,2] :
             yield (pos[0]-1,pos[1])
             print(f"Up: {pos}")
-    # Down
+    #DOWN
     if pos[0] != len(grid)-1:
         if grid[pos[0] + 1][pos[1]] in [0,2]:
             yield (pos[0] + 1, pos[1])
             print(f"Down: {pos}")
-    # Left
+    #LEFT
     if pos[1] != 0:
         if grid[pos[0]][pos[1] - 1 ] in [0,2]:
             yield (pos[0], pos[1] - 1)
             print(f"Left: {pos}")
-    # RIGHT
+    #RIGHT
     if pos[1] != len(grid)-1:
         if grid[pos[0]][pos[1]+1] in [0,2]:
             yield (pos[0],pos[1]+1)
             print(f"Right: {pos}")
 
-print(breadthFirstSolve(maze10, start=(0,1)))
+
+# Prevent run on import
+if __file__ == "main":
+    print(breadthFirstSolve(maze10, start=(0,1)))
 
 

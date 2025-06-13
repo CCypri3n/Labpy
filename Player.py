@@ -14,7 +14,7 @@ class player():
         # Find the starting position in the maze
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
-                if cell == 3:
+                if cell == 10:
                     return {"x":x, "y":y}
         raise Exception("Start position not found in the maze")
     

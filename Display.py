@@ -55,7 +55,7 @@ def display_maze(maze: np.array, cell_size: int):
                 game.draw.rect(win, (0, 0, 0), rect)
             elif cell == 0:  # Path
                 game.draw.rect(win, (255, 255, 255), rect)
-            elif cell == 3:  # Start
+            elif cell == 10:  # Start
                 game.draw.rect(win, (0, 255, 0), rect)
             elif cell == 2:  # End
                 game.draw.rect(win, (255, 0, 0), rect)
@@ -77,7 +77,7 @@ def display_solution(solution: np.array, cell_size: int):
                 game.draw.rect(win, (0, 0, 0), rect)
             elif cell == 0:  # Path
                 game.draw.rect(win, (255, 255, 255), rect)
-            elif cell == 3:  # Start
+            elif cell == 10:  # Start
                 game.draw.rect(win, (0, 255, 0), rect)
             elif cell == 2:  # End
                 game.draw.rect(win, (255, 0, 0), rect)

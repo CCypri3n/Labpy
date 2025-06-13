@@ -1,7 +1,7 @@
 import numpy as np
 
 testmaze = np.array([
-    [1, 3, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 10, 1, 1, 1, 1, 1, 1, 1, 1],
     [0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 1],
     [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
@@ -15,26 +15,37 @@ testmaze = np.array([
 
 
 # Helperfuncs
+#reverts breadthsearched maze to original
 def cleanGrid(inGrid):
+    #copy to not modify the original
     outGrid = inGrid.copy()
-    for y in inGrid:
-        for x, val in enumerate(y):
+    #iterate over every cell
+    for y, row in enumerate(inGrid):
+        for x, val in enumerate(row):
+            #check if value is clutter, if so set to 0
             if val not in [0, 1, 2, 10]:
                 outGrid[y][x] = 0
+    return outGrid
 
-
+#finds pos of maze arrival
 def getEndPos(maze) -> tuple:
-    for y in maze:
-        for x, val in enumerate(y):
+    #iterate over every cell
+    for y, row in enumerate(maze):
+        for x, val in enumerate(row):
+            #if is endcell return pos
             if val == 2:
                 return (y, x)
+    #else return None
     return None
 
-
+#finds unvisited accessible neighbours
 def getFreeNeighbours(pos, grid):
     # UP
+    #check for top border
     if pos[0] != 0:
+        #check for value of cell above
         if grid[pos[0] - 1][pos[1]] in [0, 2]:
+            #yield said value
             yield (pos[0] - 1, pos[1])
     # Down
     if pos[0] != len(grid) - 1:
@@ -96,60 +107,93 @@ def depthFirstSolve(inMaze, start=(0, 0)):
 
 
 def breadthFirstSolve(inMaze, start=(0, 0)):
+    #list of cells we are currently interested in
     current = [start]
     solved = False
+    #counts iterations
     iterCount = 0
+    #copy to avoid modifying the original
     grid = inMaze.copy()
     while not solved:
+        #keeps count
         iterCount += 1
-        print(iterCount)
+        #temporary storage which is emptied at every iteration
         future = []
+        #iterate over current points
         for curPoint in current:
-            print(current)
+            #check if arrival
             if grid[curPoint[0]][curPoint[1]] == 2:
                 solved = True
+            #if not, paint
             else:
                 grid[curPoint[0]][curPoint[1]] = 10 + iterCount
+            #add all neighbours of just painted cells to temp list
             future += [neighbour for neighbour in getFreeNeighbours(curPoint, grid)]
+        #after finishing iterations, define content of temp list as current for next iter
         current = future.copy()
+        #check if there are no cells left to check
         if current == []:
             break
-    return (solved, grid)
+    #return if solved, the solved grid and the number of iterations
+    return (solved, grid, iterCount)
 
-
-def quickestPath(breadthSearchedMaze):
+#finds the quickest path going from a breathsearchedmaze and the pathlength
+def quickestPath(breadthSearchedMaze, pathlen):
+    #copy grid to avoid modifying the original
     grid_with_path = cleanGrid(breadthSearchedMaze.copy())
+    #finds end position
     end = getEndPos(breadthSearchedMaze)
+    #check if maze has end point
     if end == None:
         raise ValueError("No end point found")
     else:
+        #define starting pos as end
         pos = end
-
-        while breadthSearchedMaze[pos[0]][pos[1]] != 10:
+        #redefine value of end for algorithm to work
+        breadthSearchedMaze[end[0]][end[1]]=pathlen+10
+        #iterate as long as beginning not reached
+        while breadthSearchedMaze[pos[0]][pos[1]] != 11:
+            #save current value
             curVal = breadthSearchedMaze[pos[0]][pos[1]]
+            foundNextStep=False
             # UP
-            if pos[0] != 0:
+            #check for top border
+            if pos[0] != 0 and not foundNextStep:
+                #check if value is next lowest
                 if breadthSearchedMaze[pos[0] - 1][pos[1]] == curVal - 1:
+                    #if so paint with 3
                     grid_with_path[pos[0] - 1][pos[1]] = 3
+                    pos=(pos[0] - 1, pos[1])
+                    foundNextStep = True
             # Down
-            elif pos[0] != len(breadthSearchedMaze) - 1:
+            if pos[0] != len(breadthSearchedMaze) - 1 and not foundNextStep:
                 if breadthSearchedMaze[pos[0] + 1][pos[1]] == curVal - 1:
                     grid_with_path[pos[0] + 1][pos[1]] = 3
+                    pos = (pos[0] + 1, pos[1])
+                    foundNextStep = True
             # Left
-            elif pos[1] != 0:
+            if pos[1] != 0 and not foundNextStep:
                 if breadthSearchedMaze[pos[0]][pos[1] - 1] == curVal - 1:
                     grid_with_path[pos[0]][pos[1] - 1] = 3
+                    pos = (pos[0], pos[1] - 1)
+                    foundNextStep = True
             # RIGHT
-            elif pos[1] != len(breadthSearchedMaze) - 1:
+            if pos[1] != len(breadthSearchedMaze) - 1 and not foundNextStep:
                 if breadthSearchedMaze[pos[0]][pos[1] + 1] == curVal - 1:
                     grid_with_path[pos[0]][pos[1] + 1] = 3
+                    foundNextStep = True
+                    pos = (pos[0], pos[1] + 1)
         return grid_with_path
 
 
 def solveMaze(inMaze, start=(0, 0)):
-    return quickestPath(breadthFirstSolve(inMaze, start))
+    solved, prepedMaze, pathlen = breadthFirstSolve(inMaze, start)
+    if solved:
+        return quickestPath(prepedMaze, pathlen)
+    else:
+        return None
 
 
-#print(solveMaze(testmaze, start=(0, 1)))
+print(solveMaze(testmaze, start=(0, 1)))
 
 

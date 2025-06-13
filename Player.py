@@ -15,35 +15,42 @@ class player():
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
                 if cell == 3:
-                    self.position = {"x":x, "y":y}
-                    return self.position
-        Exception("Start position not found in the maze")
+                    return {"x":x, "y":y}
+        raise Exception("Start position not found in the maze")
     
     def get_goal(self):
         # Find the starting position in the maze
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
                 if cell == 2:
-                    self.goal = {"x":x, "y":y}
-                    return self.goal
-        Exception("Start position not found in the maze")
+                    return {"x":x, "y":y}
+        raise Exception("End position not found in the maze")
 
-    def move(self):
+    def move(self, maze: np.array = None):
+        """This function changes the position of the player object based on keyboard input. If a maze is passed, that maze will be used instead of self.maze.
+
+        Args:
+            maze (np.array, optional): A maze the player should move on. Defaults to None.
+        """
         # Implement movement logic based on direction
+        if type(maze) != np.array:
+            maze = self.maze
+        
         keys = game.key.get_pressed()
+        x, y = self.position["x"], self.position["y"]
         
         try:
             if keys[K_LEFT]:
-                if self.maze[self.position["y"]][self.position["x"]-1] != 1:
+                if maze[self.position["y"]][self.position["x"]-1] != 1 and x > 0:
                     self.position["x"] -= 1
             if keys[K_RIGHT]:
-                if self.maze[self.position["y"]][self.position["x"]+1] != 1:
+                if maze[self.position["y"]][self.position["x"]+1] != 1 and x < len(self.maze[0])-1:
                     self.position["x"] += 1
             if keys[K_UP]:
-                if self.maze[self.position["y"]-1][self.position["x"]] != 1:
+                if maze[self.position["y"]-1][self.position["x"]] != 1 and y > 0:
                     self.position["y"] -= 1
             if keys[K_DOWN]:
-                if self.maze[self.position["y"]+1][self.position["x"]] != 1:
+                if maze[self.position["y"]+1][self.position["x"]] != 1 and x < len(self.maze[1])-1:
                     self.position["y"] += 1
         except Exception as e:
             print(e)
@@ -52,6 +59,8 @@ class player():
         self.move()  # Update player position based on input
         if self.position == self.goal:
             self.win = True
-
         return self.maze
-
+    
+    def followSol(self, solution: np.array):
+        y, x = self.position["y"], self.position["x"]
+        pass

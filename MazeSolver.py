@@ -43,7 +43,7 @@ def depthFirstSolve(inMaze, start={"x":0, "y":0}):
 
     return (False, maze)
 
-def breadthFirstSolve(inMaze, start = {"x":0, "y":0}, end= {"x":1,"y":1}):
-    visited=[]
-    neighbours=[]
-    while
+#def breadthFirstSolve(inMaze, start = {"x":0, "y":0}, end= {"x":1,"y":1}):
+#    visited=[]
+#    neighbours=[]
+#    while

@@ -81,6 +81,8 @@ def display_solution(solution: np.array, cell_size: int):
                 game.draw.rect(win, (0, 255, 0), rect)
             elif cell == 2:  # End
                 game.draw.rect(win, (255, 0, 0), rect)
+            elif cell == 4: # Solution
+                game.draw.rect(win, (0, 255, 255), rect)
 
 def display_player(player_pos: dict, cell_size: int):
     """_summary_
@@ -97,8 +99,3 @@ def display_player(player_pos: dict, cell_size: int):
 
 if __name__ == "__main__":
     main()
-# This code initializes a Pygame window and runs a simple event loop.
-# It listens for the quit event to close the window and updates the display at 60 frames per second.
-# The window is filled with a black color each frame.
-# The code is structured to be run as a standalone script.
-# It uses the Pygame library to create a graphical window.

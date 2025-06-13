@@ -30,12 +30,8 @@ def main():
     # Create a maze
     maze = MazeGen.genMaze(100, {"x": 0, "y": 25})
     cell_size = min(width // len(maze[0]), height // len(maze))
-    solutionTuple = (0, 0)
-    solutionTuple = MazeSol.depthFirstSolve(maze, get_start(maze))
-    print(solutionTuple)
     P1 = Player.player(maze)
 
-    clock = game.time.Clock()
     running = True
     while running:
         for event in game.event.get():
@@ -43,18 +39,29 @@ def main():
                 running = False
         if P1: maze = P1.update()  # Update player state
         win.fill((0, 0, 0))  # Fill the screen with black
-        Display.display_maze(maze, cell_size) if not solutionTuple[0] else Display.display_solution(solutionTuple[1], cell_size)
+        Display.display_maze(maze, cell_size)
         if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
-        clock.tick(25)  # Limit to 60 FPS
+        clock.tick(fps)
 
     game.quit()
 
-    # Solve the maze
-    #solution = MazeSol.solve_maze(maze)
+def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player):
+    solutionTuple = (0, 0)
+    solutionTuple = MazeSol.depthFirstSolve(maze, get_start(maze))
+    print(solutionTuple)
+    running = True
+    while running:
+        for event in game.event.get():
+            if event.type == game.QUIT:
+                running = False
+        win.fill((0, 0, 0))  # Fill the screen with black
+        Display.display_solution(solutionTuple[1], cell_size)
+        if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
+        game.display.flip()  # Update the display
+        clock.tick(fps)
 
-    # Display the maze and solution
-    #Display.display_maze(maze)
+
 
 def get_start(maze):
         # Find the starting position in the maze
@@ -67,5 +74,7 @@ def get_start(maze):
 
 if __name__ == "__main__":
     import sys
-    sys.setrecursionlimit(2000)
+    sys.setrecursionlimit(5000)
+    fps = 25
+    clock = game.time.Clock()
     main()

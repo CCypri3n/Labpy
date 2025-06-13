@@ -56,7 +56,7 @@ def main_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.play
 
 def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player = None):
     solutionTuple = (0, 0)
-    solutionTuple = MazeSol.breadthFirstSolve(maze, get_start(maze))
+    solutionTuple = MazeSol.solveMaze(maze, get_start(maze))
     print(solutionTuple[1])
     running = True
     animationInt = 10

@@ -15,3 +15,8 @@ Mazes are represented as 2D-Numpy-Arrays containing integers:
 ## Coordinates
 
 Coordinates are generally to be passed on as tuples in the (y,x) format.
+
+## TODO
+
+- Change movement to be independent from FPS and increase speed of solvAnimation.
+- Save solvAnimation state, to continue after space-click.

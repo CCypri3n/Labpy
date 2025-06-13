@@ -25,6 +25,14 @@ def main(win: game.display, width: int, height: int, size: int = None, start: tu
     maze = MazeGen.genMaze(size, start) if size else maze10
     cell_size = min(width // len(maze[0]), height // len(maze))
 
+    ## Set Variables
+    Display.display_maze.counter = 0.0
+    Display.display_solution.animationInt = 10
+    Display.display_solution.count = 0
+    
+    win.fill((0, 0, 0))
+    game.display.flip()
+
     play_loop(win, maze, cell_size)
 
     game.quit()
@@ -53,8 +61,8 @@ def solve_loop(win: game.display, maze: np.array, cell_size):
     solutionTuple = (0, 0)
     solutionTuple = MazeSol.solveMaze(maze, get_start(maze))
     running = True
-    animationInt = 10
-    iterCount = 0
+    Display.display_solution.animationInt = 10
+    Display.display_solution.count = 0
     while running:
         for event in game.event.get():
             if event.type == game.QUIT:
@@ -66,12 +74,7 @@ def solve_loop(win: game.display, maze: np.array, cell_size):
                     running = False
                     all_way_solve_loop(win, maze, cell_size)
                     break
-        win.fill((0, 0, 0))  # Fill the screen with black
-        iterCount += 1
-        if iterCount == 2:
-            animationInt += 1
-        iterCount %= 2
-        Display.display_solution(solutionTuple[1], cell_size, animationInt)
+        Display.display_solution(solutionTuple[1], cell_size)
         game.display.flip()  # Update the display
         clock.tick(fps)
 
@@ -80,7 +83,10 @@ def all_way_solve_loop(win: game.display, maze: np.array, cell_size):
     solutionTuple = MazeSol.breadthFirstSolve(maze, get_start(maze))
     running = True
     animationInt = 10
-    iterCount = 0
+    Display.display_solution.animationInt = 10
+    Display.display_solution.count = 0
+    Display.display_maze(maze, cell_size)
+    game.display.flip()
     while running:
         for event in game.event.get():
             if event.type == game.QUIT:
@@ -92,13 +98,8 @@ def all_way_solve_loop(win: game.display, maze: np.array, cell_size):
                     running = False
                     play_loop(win, maze, cell_size)
                     break
-        win.fill((0, 0, 0))  # Fill the screen with black
-        iterCount += 1
-        if iterCount == 2:
-            animationInt += 1
-        iterCount %= 2
-        Display.display_solution(solutionTuple[1], cell_size, animationInt)
-        game.display.flip()  # Update the display
+        updateRects = Display.display_solution(solutionTuple[1], cell_size)
+        game.display.update(updateRects)  # Update the display
         clock.tick(fps)
 
 def get_start(maze):

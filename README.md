@@ -30,3 +30,13 @@ Coordinates are generally to be passed on as tuples in the (y,x) format.
     [[2 0 0]
     [0 1 0]
     [0 0 0]]
+- ```Traceback (most recent call last):
+  File "/Users/cyprien/Coding/Gits/Labpy/main.py", line 139, in <module>
+    main(win, width, height, size if size else None, start if start else None)
+  File "/Users/cyprien/Coding/Gits/Labpy/main.py", line 25, in main
+    maze = MazeGen.genMaze(size, start) if size else maze10
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/cyprien/Coding/Gits/Labpy/MazeGenerator.py", line 36, in genMaze
+    maze[end[1]][end[0]]=2
+    ~~~~~~~~~~~~^^^^^^^^
+IndexError: index 100 is out of bounds for axis 0 with size 100 ```

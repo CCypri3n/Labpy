@@ -9,7 +9,7 @@ class player():
         self.path = None
         self.win = None
         self.goal = None
-        self.difficulty = 2
+        self.difficulty = 10
     
     def new_game(self, maze):
         self.maze = maze

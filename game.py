@@ -36,6 +36,13 @@ def new_game(win: game.display, width: int, height: int, P1: Player.player):
     cell_size = min(width // len(maze[0]), height // len(maze))
     P1.new_game(maze)
 
+    ## Set Variables
+    Display.display_maze.counter = 0.0
+    Display.display_solution.animationInt = 10
+    Display.display_solution.count = 0.0
+    win.fill((0, 0, 0))
+    game.display.flip()
+
     play_loop(win, maze, cell_size, P1 if P1 else None)
 
     game.quit()
@@ -57,21 +64,20 @@ def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.play
                     break
                 else:
                     if P1: maze = P1.update(event.key)
-        win.fill((0, 0, 0))  # Fill the screen with black
-        Display.display_maze(maze, cell_size) if not P1.win else bool(running)
-        if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
-        game.display.flip()  # Update the display
+        win.fill((0, 0, 0))
+        updateRect = Display.display_maze(maze, cell_size)
+        if P1 and len(maze)-1 <= Display.display_maze.counter: updateRect = Display.display_player(P1.position, cell_size)  # Draw the player on the maze
+        game.display.update()  # Update the display
         clock.tick(fps)
         if P1.win:
             running = False
+
     win_loop(win, maze, cell_size, P1)
 
 def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player = None):
     solutionTuple = (0, 0)
     solutionTuple = MazeSol.solveMaze(maze, get_start(maze))
     running = True
-    animationInt = 10
-    iterCount = 0
     while running:
         for event in game.event.get():
             if event.type == game.QUIT:
@@ -79,18 +85,13 @@ def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player =
                 game.quit()
                 exit()
             elif event.type == game.KEYDOWN:
-                if event.key == game.K_SPACE and animationInt >= np.max(solutionTuple[1]):
+                if event.key == game.K_SPACE:
                     running = False
                     play_loop(win, maze, cell_size, P1 if P1 else None)
                     break
-        win.fill((0, 0, 0))  # Fill the screen with black
-        iterCount += 1
-        if iterCount == 2:
-            animationInt += 1
-        iterCount %= 2
-        Display.display_solution(solutionTuple[1], cell_size, animationInt)
+        updateRect = Display.display_solution(solutionTuple[1], cell_size)
         if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
-        game.display.flip()  # Update the display
+        game.display.update(updateRect if updateRect else game.Rect(0, 0, width, height))  # Update the display
         clock.tick(fps)
 
 def win_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player):

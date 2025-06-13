@@ -16,9 +16,11 @@ Mazes are represented as 2D-Numpy-Arrays containing integers:
 
 Coordinates are generally to be passed on as tuples in the (y,x) format.
 
-## TODO
+## TODO - Cyprien
 
-- improve FPS by updating only specific parts of display
+- Improve FPS by updating only specific parts of display
 - Save solvAnimation state, to continue after space-click.
 - Change velocity of Player depending on length of keyhold
 - move player with keyhold
+- Add win animation
+- Add increasing level difficulty (4 - 100)

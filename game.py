@@ -1,6 +1,5 @@
 import numpy as np
 import pygame as game
-import random
 
 import Display as Display
 import Player as Player
@@ -10,27 +9,28 @@ import MazeGenerator as MazeGen
 maze10 = np.array([
     [1, 10, 1, 1, 1, 1, 1, 1, 1, 1],
     [0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 1],
+    [1, 2, 1, 0, 1, 0, 1, 0, 1, 1],
     [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
     [1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
     [1, 0, 0, 0, 0, 0, 1, 0, 0, 1],
     [1, 0, 1, 1, 1, 0, 1, 1, 0, 1],
     [1, 0, 1, 0, 1, 0, 0, 1, 0, 1],
-    [1, 0, 1, 0, 0, 0, 1, 1, 2, 1],
+    [1, 0, 1, 0, 0, 0, 1, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ])
 
-def main(win: game.display, width: int, height: int, size: int = None, start: tuple = (0, 0)):
+def new_game(win: game.display, width: int, height: int, P1: Player.player):
     # Create a maze
-    maze = MazeGen.genMaze(size, start) if size else maze10
+    maze = MazeGen.genMaze(10, (7, 7))
     cell_size = min(width // len(maze[0]), height // len(maze))
+    P1.init(maze)
 
-    play_loop(win, maze, cell_size)
+    play_loop(win, maze, cell_size, P1 if P1 else None)
 
     game.quit()
     exit()
 
-def play_loop(win: game.display, maze: np.array, cell_size: int):
+def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player = None):
     global animationInt
     running = True
     while running:
@@ -42,14 +42,17 @@ def play_loop(win: game.display, maze: np.array, cell_size: int):
             elif event.type == game.KEYDOWN:
                 if event.key == game.K_SPACE:
                     running = False
-                    animationInt = solve_loop(win, maze, cell_size)
+                    animationInt = solve_loop(win, maze, cell_size, P1 if P1 else None)
                     break
+                else:
+                    if P1: maze = P1.update(event.key)
         win.fill((0, 0, 0))  # Fill the screen with black
-        Display.display_maze(maze, cell_size)
+        Display.display_maze(maze, cell_size) if not P1.win else win_loop(win, maze, cell_size, P1)
+        if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
         clock.tick(fps)
 
-def solve_loop(win: game.display, maze: np.array, cell_size):
+def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player = None):
     solutionTuple = (0, 0)
     solutionTuple = MazeSol.solveMaze(maze, get_start(maze))
     running = True
@@ -62,9 +65,9 @@ def solve_loop(win: game.display, maze: np.array, cell_size):
                 game.quit()
                 exit()
             elif event.type == game.KEYDOWN:
-                if event.key == game.K_SPACE:
+                if event.key == game.K_SPACE and animationInt >= np.max(solutionTuple[1]):
                     running = False
-                    all_way_solve_loop(win, maze, cell_size)
+                    play_loop(win, maze, cell_size, P1 if P1 else None)
                     break
         win.fill((0, 0, 0))  # Fill the screen with black
         iterCount += 1
@@ -72,34 +75,24 @@ def solve_loop(win: game.display, maze: np.array, cell_size):
             animationInt += 1
         iterCount %= 2
         Display.display_solution(solutionTuple[1], cell_size, animationInt)
+        if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
         clock.tick(fps)
 
-def all_way_solve_loop(win: game.display, maze: np.array, cell_size):
-    solutionTuple = (0, 0)
-    solutionTuple = MazeSol.breadthFirstSolve(maze, get_start(maze))
+def win_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player):
     running = True
-    animationInt = 10
-    iterCount = 0
-    while running:
+    for i in range(60):
         for event in game.event.get():
             if event.type == game.QUIT:
                 running = False
                 game.quit()
                 exit()
-            elif event.type == game.KEYDOWN:
-                if event.key == game.K_SPACE:
-                    running = False
-                    play_loop(win, maze, cell_size)
-                    break
         win.fill((0, 0, 0))  # Fill the screen with black
-        iterCount += 1
-        if iterCount == 2:
-            animationInt += 1
-        iterCount %= 2
-        Display.display_solution(solutionTuple[1], cell_size, animationInt)
+        Display.display_win(maze, cell_size)
+        Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
         clock.tick(fps)
+    new_game()
 
 def get_start(maze):
     # Find the starting position in the maze
@@ -111,21 +104,11 @@ def get_start(maze):
     Exception("Start position not found in the maze")
 
 if __name__ == "__main__":
-    print("\n\n------------ Labpy V1 ------------\nmade with ♥ by CCypri3n and Ruby\n\nUse: Enter a maze size (between 2 and 100) for random maze generation or press enter to select the default maze.\nPress space to see the path, press space again to see the algorithm.")
-
-    size, start = None, None
-    size = input("\nPlease enter a labyrinth size (Leave blank for default size 10 maze): ")
-    while not size.isdigit() and size:
-        size = input("\nPlease enter a labyrinth size: ")
-    if size.isdigit():
-        size = int(size)
-        start = (random.choice(range(0, size)), random.choice(range(0, size)))
-
     import sys
     sys.setrecursionlimit(5000)
     fps = 60
     clock = game.time.Clock()
     width, height = 700, 700
     win = Display.init_display(caption="Labpy", H=height, W=width)
-
-    main(win, width, height, size if size else None, start if start else None)
+    P1 = Player.player()
+    new_game(win, width, height, P1)

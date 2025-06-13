@@ -3,13 +3,22 @@ import pygame as game
 from pygame.locals import *
 
 class player():
-    def __init__(self, maze):
+    def __init__(self):
+        self.maze = None
+        self.position = None
+        self.path = None
+        self.win = None
+        self.goal = None
+        self.difficulty = 4
+    
+    def new_game(self, maze):
         self.maze = maze
         self.position = self.get_start()  # Starting position
         self.path = []  # Path taken by the player
         self.win = False
         self.goal = self.get_goal()
-    
+        self.difficulty += 1
+
     def get_start(self):
         # Find the starting position in the maze
         for y, row in enumerate(self.maze):
@@ -50,7 +59,7 @@ class player():
                 if maze[self.position["y"]-1][self.position["x"]] != 1 and y > 0:
                     self.position["y"] -= 1
             if key == game.K_DOWN:
-                if maze[self.position["y"]+1][self.position["x"]] != 1 and x < len(self.maze[1])-1:
+                if maze[self.position["y"]+1][self.position["x"]] != 1 and y < len(self.maze[1]):
                     self.position["y"] += 1
         except Exception as e:
             print(e)

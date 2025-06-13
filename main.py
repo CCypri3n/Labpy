@@ -19,13 +19,9 @@ maze10 = np.array([
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ])
 
-def main():
-    # Initialize the display
-    width, height = 700, 700
-    win = Display.init_display(caption="Labpy", H=height, W=width)
-
+def main(win: game.display, width: int, height: int):
     # Create a maze
-    maze = MazeGen.genMaze(100, (0, 25))
+    maze = MazeGen.genMaze(100, (17, 30))
     print(np.argmax(maze))
     cell_size = min(width // len(maze[0]), height // len(maze))
     P1 = Player.player(maze)
@@ -52,7 +48,7 @@ def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.play
                 else:
                     if P1: maze = P1.update(event.key)
         win.fill((0, 0, 0))  # Fill the screen with black
-        Display.display_maze(maze, cell_size) if not P1.win else Display.display_win(maze, cell_size) 
+        Display.display_maze(maze, cell_size) if not P1.win else win_loop(win, maze, cell_size, P1)
         if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
         clock.tick(fps)
@@ -77,11 +73,25 @@ def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player =
                     break
         win.fill((0, 0, 0))  # Fill the screen with black
         iterCount += 1
-        if iterCount == 2:
+        if iterCount == fps/30:
             animationInt += 1
-        iterCount %= 2  
+        iterCount %= fps/30  
         Display.display_solution(solutionTuple[1], cell_size, animationInt)
         if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
+        game.display.flip()  # Update the display
+        clock.tick(fps)
+
+def win_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player):
+    running = True
+    while running:
+        for event in game.event.get():
+            if event.type == game.QUIT:
+                running = False
+                game.quit()
+                exit()
+        win.fill((0, 0, 0))  # Fill the screen with black
+        Display.display_win(maze, cell_size)
+        Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
         clock.tick(fps)
 
@@ -97,7 +107,8 @@ def get_start(maze):
 if __name__ == "__main__":
     import sys
     sys.setrecursionlimit(5000)
-    fps = 25
+    fps = 60
     clock = game.time.Clock()
-    animationInt = 10
-    main()
+    width, height = 700, 700
+    win = Display.init_display(caption="Labpy", H=height, W=width)
+    main(win, width, height)

@@ -3,6 +3,13 @@
 A simple python project, to solve and display mazes.
 
 ## Maze formats
+Mazes are represented as 2D-Numpy-Arrays containing integers:
+0 : no wall
+1 : wall
+2 : endpoint of the maze
+3 : starting tile
+4 : unordered solution path
+11+ : the breadth-first search layers
 
-The mazes are represented as Numpy-Matrices, with 0 as a NOWALL and 1 as WALL. 2 indicates the end of the maze, 3 indicates the start.
-Coordinates are represented as (y, x), (0, 0) is in the top-left corner.
+## Coordinates
+Coordinates are generally to be passed on as tuples in the (y,x) format.

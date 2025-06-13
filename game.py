@@ -27,6 +27,8 @@ def new_game(win: game.display, width: int, height: int, P1: Player.player):
     while True:
         try:
             maze = MazeGen.genMaze(size, (random.choice(range(0, size-1)), random.choice(range(0, size-1))))
+            get_start(maze)
+            get_goal(maze)
             break
         except:
             continue
@@ -116,7 +118,15 @@ def get_start(maze):
             if cell == 10:
                 position = (y, x)
                 return position
-    Exception("Start position not found in the maze")
+    Exception("Start position not found in the maze {maze}")
+
+def get_goal(maze):
+        # Find the starting position in the maze
+        for y, row in enumerate(maze):
+            for x, cell in enumerate(row):
+                if cell == 2:
+                    return {"x":x, "y":y}
+        raise Exception("End position not found in the maze {maze}")
 
 if __name__ == "__main__":
     import sys

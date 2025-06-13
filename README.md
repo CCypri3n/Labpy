@@ -23,3 +23,10 @@ Coordinates are generally to be passed on as tuples in the (y,x) format.
 - move player with keyhold
 - Add win animation
 - Add increasing level difficulty (4 - 100)
+
+## Errors
+
+- MazeGeneration without starting position: Exception: Start position not found in the maze
+    [[2 0 0]
+    [0 1 0]
+    [0 0 0]]

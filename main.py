@@ -123,7 +123,7 @@ if __name__ == "__main__":
         start = (random.choice(range(0, size)), random.choice(range(0, size)))
 
     import sys
-    sys.setrecursionlimit(5000)
+    sys.setrecursionlimit(10000)
     fps = 60
     clock = game.time.Clock()
     width, height = 700, 700

@@ -9,7 +9,7 @@ class player():
         self.path = None
         self.win = None
         self.goal = None
-        self.difficulty = 4
+        self.difficulty = 2
     
     def new_game(self, maze):
         self.maze = maze
@@ -25,7 +25,7 @@ class player():
             for x, cell in enumerate(row):
                 if cell == 10:
                     return {"x":x, "y":y}
-        raise Exception("Start position not found in the maze")
+        raise Exception(f"Start position not found in the maze {self.maze}")
     
     def get_goal(self):
         # Find the starting position in the maze
@@ -33,7 +33,7 @@ class player():
             for x, cell in enumerate(row):
                 if cell == 2:
                     return {"x":x, "y":y}
-        raise Exception("End position not found in the maze")
+        raise Exception(f"End position not found in the maze {self.maze}")
 
     def move(self, key: game.event, maze: np.array = None):
         """This function changes the position of the player object based on keyboard input. If a maze is passed, that maze will be used instead of self.maze.

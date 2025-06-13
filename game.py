@@ -1,5 +1,6 @@
 import numpy as np
 import pygame as game
+import random
 
 import Display as Display
 import Player as Player
@@ -21,9 +22,17 @@ maze10 = np.array([
 
 def new_game(win: game.display, width: int, height: int, P1: Player.player):
     # Create a maze
-    maze = MazeGen.genMaze(10, (7, 7))
+    
+    size = P1.difficulty
+    while True:
+        try:
+            maze = MazeGen.genMaze(size, (random.choice(range(0, size-1)), random.choice(range(0, size-1))))
+            break
+        except:
+            continue
+
     cell_size = min(width // len(maze[0]), height // len(maze))
-    P1.init(maze)
+    P1.new_game(maze)
 
     play_loop(win, maze, cell_size, P1 if P1 else None)
 
@@ -47,10 +56,13 @@ def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.play
                 else:
                     if P1: maze = P1.update(event.key)
         win.fill((0, 0, 0))  # Fill the screen with black
-        Display.display_maze(maze, cell_size) if not P1.win else win_loop(win, maze, cell_size, P1)
+        Display.display_maze(maze, cell_size) if not P1.win else bool(running)
         if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
         clock.tick(fps)
+        if P1.win:
+            running = False
+    win_loop(win, maze, cell_size, P1)
 
 def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player = None):
     solutionTuple = (0, 0)
@@ -80,19 +92,22 @@ def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player =
         clock.tick(fps)
 
 def win_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player):
+    i = 0
     running = True
-    for i in range(60):
+    while running:
         for event in game.event.get():
             if event.type == game.QUIT:
                 running = False
                 game.quit()
                 exit()
+        i += 1
+        running = False if i >= 60 else True
         win.fill((0, 0, 0))  # Fill the screen with black
         Display.display_win(maze, cell_size)
         Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
         clock.tick(fps)
-    new_game()
+    new_game(win, width, height, P1)
 
 def get_start(maze):
     # Find the starting position in the maze

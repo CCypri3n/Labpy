@@ -2,27 +2,27 @@ import numpy as np
 import random
 
 def recursiveMazeGen(maze, start):
-    maze[start["y"]][start["x"]] = 0  # Mark current cell as free space
+    maze[start[0]][start[1]] = 0  # Mark current cell as free space
 
     # Define directions: (dy, dx)
     directions = [
-        {"y": -2, "x": 0},  # Up
-        {"y": 2, "x": 0},   # Down
-        {"y": 0, "x": -2},  # Left
-        {"y": 0, "x": 2},   # Right
+        (-2,0),  # Up
+        (2,0),   # Down
+        (0,-2),  # Left
+        (0,2),   # Right
     ]
     random.shuffle(directions)  # Randomize directions for more interesting mazes
 
     for d in directions:
-        ny = start["y"] + d["y"]
-        nx = start["x"] + d["x"]
+        ny = start[0] + d[0]
+        nx = start[1] + d[1]
         # Check if neighbor is within bounds
         if 0 <= ny < maze.shape[0] and 0 <= nx < maze.shape[1]:
             if maze[ny][nx] == 1:  # If neighbor cell is still a wall
                 # Carve passage between current and neighbor
-                maze[start["y"] + d["y"] // 2][start["x"] + d["x"] // 2] = 0
+                maze[start[0] + d[0] // 2][start[1] + d[1] // 2] = 0
                 # Recursively continue from neighbor
-                recursiveMazeGen(maze, {"y": ny, "x": nx})
+                recursiveMazeGen(maze, (ny, nx))
     return maze
 
 def genMaze(size, start):
@@ -38,4 +38,4 @@ def genMaze(size, start):
 
 
 
-genMaze(20,{"x":0,"y":1})
+print(genMaze(20,(0,0)))

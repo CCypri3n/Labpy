@@ -18,5 +18,6 @@ Coordinates are generally to be passed on as tuples in the (y,x) format.
 
 ## TODO
 
-- Change movement to be independent from FPS and increase speed of solvAnimation.
+- increase speed of solvAnimation.
 - Save solvAnimation state, to continue after space-click.
+- Change velocity of Player depending on length of keyhold

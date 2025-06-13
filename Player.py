@@ -26,39 +26,38 @@ class player():
                     return {"x":x, "y":y}
         raise Exception("End position not found in the maze")
 
-    def move(self, maze: np.array = None):
+    def move(self, key: game.event, maze: np.array = None):
         """This function changes the position of the player object based on keyboard input. If a maze is passed, that maze will be used instead of self.maze.
 
         Args:
+            key (game.event): The pressed keys for movement
             maze (np.array, optional): A maze the player should move on. Defaults to None.
         """
         # Implement movement logic based on direction
         if type(maze) != np.array:
             maze = self.maze
         
-        keys = game.key.get_pressed()
         x, y = self.position["x"], self.position["y"]
         
         try:
-            if keys[K_LEFT]:
+            if key == game.K_LEFT:
                 if maze[self.position["y"]][self.position["x"]-1] != 1 and x > 0:
                     self.position["x"] -= 1
-            if keys[K_RIGHT]:
+            if key == game.K_RIGHT:
                 if maze[self.position["y"]][self.position["x"]+1] != 1 and x < len(self.maze[0])-1:
                     self.position["x"] += 1
-            if keys[K_UP]:
+            if key == game.K_UP:
                 if maze[self.position["y"]-1][self.position["x"]] != 1 and y > 0:
                     self.position["y"] -= 1
-            if keys[K_DOWN]:
+            if key == game.K_DOWN:
                 if maze[self.position["y"]+1][self.position["x"]] != 1 and x < len(self.maze[1])-1:
                     self.position["y"] += 1
         except Exception as e:
             print(e)
 
-    def update(self):
-        self.move()  # Update player position based on input
-        if self.position == self.goal:
-            self.win = True
+    def update(self, key):
+        self.move(key) if not self.win else None # Update player position based on input
+        self.win = True if self.position == self.goal else None
         return self.maze
     
     def followSol(self, solution: np.array):

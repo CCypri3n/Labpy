@@ -98,5 +98,8 @@ def display_player(player_pos: dict, cell_size: int):
     game.draw.circle(win, (0, 0, 255), rect.center, cell_size/3)  # Draw player in blue
     #print(f"Player position: {player_pos}, Rect: {rect}")
 
+def display_win(maze: np.array, cell_size: int):
+    pass
+
 if __name__ == "__main__":
     main()

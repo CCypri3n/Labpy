@@ -26,15 +26,17 @@ def main():
 
     # Create a maze
     maze = MazeGen.genMaze(100, (0, 25))
+    print(np.argmax(maze))
     cell_size = min(width // len(maze[0]), height // len(maze))
     P1 = Player.player(maze)
 
-    main_loop(win, maze, cell_size, P1 if P1 else None)
+    play_loop(win, maze, cell_size, P1 if P1 else None)
 
     game.quit()
     exit()
 
-def main_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player = None):
+def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player = None):
+    global animationInt
     running = True
     while running:
         for event in game.event.get():
@@ -45,11 +47,12 @@ def main_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.play
             elif event.type == game.KEYDOWN:
                 if event.key == game.K_SPACE:
                     running = False
-                    solve_loop(win, maze, cell_size, P1 if P1 else None)
+                    animationInt = solve_loop(win, maze, cell_size, P1 if P1 else None)
                     break
-        if P1: maze = P1.update()  # Update player state
+                else:
+                    if P1: maze = P1.update(event.key)
         win.fill((0, 0, 0))  # Fill the screen with black
-        Display.display_maze(maze, cell_size)
+        Display.display_maze(maze, cell_size) if not P1.win else Display.display_win(maze, cell_size) 
         if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
         clock.tick(fps)
@@ -70,7 +73,7 @@ def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player =
             elif event.type == game.KEYDOWN:
                 if event.key == game.K_SPACE:
                     running = False
-                    main_loop(win, maze, cell_size, P1 if P1 else None)
+                    play_loop(win, maze, cell_size, P1 if P1 else None)
                     break
         win.fill((0, 0, 0))  # Fill the screen with black
         iterCount += 1
@@ -96,4 +99,5 @@ if __name__ == "__main__":
     sys.setrecursionlimit(5000)
     fps = 25
     clock = game.time.Clock()
+    animationInt = 10
     main()

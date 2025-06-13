@@ -185,7 +185,6 @@ def quickestPath(breadthSearchedMaze, pathlen):
                     pos = (pos[0], pos[1] + 1)
         return grid_with_path
 
-
 def solveMaze(inMaze, start=(0, 0)):
     solved, prepedMaze, pathlen = breadthFirstSolve(inMaze, start)
     if solved:
@@ -193,7 +192,5 @@ def solveMaze(inMaze, start=(0, 0)):
     else:
         return None
 
-
-print(solveMaze(testmaze, start=(0, 1)))
-
-
+if __name__ == "__main__":
+    print(solveMaze(testmaze, start=(0, 1)))

@@ -194,6 +194,7 @@ def solveMaze(inMaze, start=(0, 0)):
         return None
 
 
-print(solveMaze(testmaze, start=(0, 1)))
+
+#print(solveMaze(testmaze, start=(0, 1)))
 
 

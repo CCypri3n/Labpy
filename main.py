@@ -111,12 +111,13 @@ def get_start(maze):
     Exception("Start position not found in the maze")
 
 if __name__ == "__main__":
-    print("\n\n------------ Labpy V1 ------------\nmade with ♥ by CCypri3n and Ruby\n\nUse: Enter a maze size (between 2 and 100) for random maze generation or press enter to select the default maze.\nPress space to see the path, press space again to see the algorithm.")
+    print("\n\n------------ Labpy V1 ------------\nmade with ♥ by CCypri3n and Ruby\n\nUse:\n - Enter a maze size (between 2 and 100) for random maze generation or press enter to select the default maze.\n - Press space to see the path, press space again to see the algorithm.")
 
     size, start = None, None
     size = input("\nPlease enter a labyrinth size (Leave blank for default size 10 maze): ")
     while not size.isdigit() and size:
         size = input("\nPlease enter a labyrinth size: ")
+    print("\n\n\n Loading ... \n\n\n")
     if size.isdigit():
         size = int(size)
         start = (random.choice(range(0, size)), random.choice(range(0, size)))

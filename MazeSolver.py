@@ -47,15 +47,19 @@ def breadthFirstSolve(inMaze, start = (0,0)):
     current=[start]
     solved= False
     iterCount=0
+    grid=inMaze.copy()
     while not solved:
         iterCount+=1
         for curPoint in current:
-            if inMaze[curPoint[0]][curPoint[1]]==2:
+            if grid[curPoint[0]][curPoint[1]]==2:
                 solved=True
             else:
-                inMaze[curPoint[0]][curPoint[1]]=3
-            current.append([neighbour for neighbour in getFreeNeighbours(curPoint, inMaze)])
+                grid[curPoint[0]][curPoint[1]]=3
+            current.append([neighbour for neighbour in getFreeNeighbours(curPoint, grid)])
             current.remove(curPoint)
+        if current == []:
+            break
+    return (solved, grid)
 
 
 

@@ -81,7 +81,7 @@ def display_solution(solution: np.array, cell_size: int):
                 game.draw.rect(win, (0, 255, 0), rect)
             elif cell == 2:  # End
                 game.draw.rect(win, (255, 0, 0), rect)
-            elif cell == 4: # Solution
+            elif cell == 4 or cell >= 10: # Solution
                 game.draw.rect(win, (0, 255, 255), rect)
 
 def display_player(player_pos: dict, cell_size: int):

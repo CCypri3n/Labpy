@@ -43,7 +43,40 @@ def depthFirstSolve(inMaze, start={"x":0, "y":0}):
 
     return (False, maze)
 
-#def breadthFirstSolve(inMaze, start = {"x":0, "y":0}, end= {"x":1,"y":1}):
-#    visited=[]
-#    neighbours=[]
-#    while
+def breadthFirstSolve(inMaze, start = (0,0)):
+    current=[start]
+    solved= False
+    iterCount=0
+    while not solved:
+        iterCount+=1
+        for curPoint in current:
+            if inMaze[curPoint[0]][curPoint[1]]==2:
+                solved=True
+            else:
+                inMaze[curPoint[0]][curPoint[1]]=3
+            current.append([neighbour for neighbour in getFreeNeighbours(curPoint, inMaze)])
+            current.remove(curPoint)
+
+
+
+def getFreeNeighbours(pos, grid):
+    #UP
+    if pos[0] != 0:
+        if grid[pos[0]-1][pos[1]] in [0,2] :
+            yield (pos[0]-1,pos[1])
+    # Down
+    if pos[0] != len(grid)-1:
+        if grid[pos[0] + 1][pos[1]] in [0,2]:
+            yield (pos[0] - 1, pos[1])
+    # Left
+    if pos[1] != 0:
+        if grid[pos[0]][pos[1] - 1 ] in [0,2]:
+            yield (pos[0], pos[1] - 1)
+    # RIGHT
+    if pos[1] != len(grid)-1:
+        if grid[pos[0]][pos[1]+1] in [0,2]:
+            yield (pos[0],pos[1]+1)
+
+
+
+

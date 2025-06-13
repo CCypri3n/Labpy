@@ -1,17 +1,6 @@
 import numpy as np
 
-testmaze = np.array([
-    [1, 10, 1, 1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 1],
-    [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-    [1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 1, 1, 0, 1, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 2, 1, 0, 1],
-    [1, 0, 1, 0, 0, 0, 1, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-])
+
 
 
 # Helperfuncs
@@ -162,25 +151,25 @@ def quickestPath(breadthSearchedMaze, pathlen):
                 #check if value is next lowest
                 if breadthSearchedMaze[pos[0] - 1][pos[1]] == curVal - 1:
                     #if so paint with 3
-                    grid_with_path[pos[0] - 1][pos[1]] = 3
+                    grid_with_path[pos[0] - 1][pos[1]] = breadthSearchedMaze[pos[0] - 1][pos[1]]
                     pos=(pos[0] - 1, pos[1])
                     foundNextStep = True
             # Down
             if pos[0] != len(breadthSearchedMaze) - 1 and not foundNextStep:
                 if breadthSearchedMaze[pos[0] + 1][pos[1]] == curVal - 1:
-                    grid_with_path[pos[0] + 1][pos[1]] = 3
+                    grid_with_path[pos[0] + 1][pos[1]] = breadthSearchedMaze[pos[0] + 1][pos[1]]
                     pos = (pos[0] + 1, pos[1])
                     foundNextStep = True
             # Left
             if pos[1] != 0 and not foundNextStep:
                 if breadthSearchedMaze[pos[0]][pos[1] - 1] == curVal - 1:
-                    grid_with_path[pos[0]][pos[1] - 1] = 3
+                    grid_with_path[pos[0]][pos[1] - 1] = breadthSearchedMaze[pos[0]][pos[1] - 1]
                     pos = (pos[0], pos[1] - 1)
                     foundNextStep = True
             # RIGHT
             if pos[1] != len(breadthSearchedMaze) - 1 and not foundNextStep:
                 if breadthSearchedMaze[pos[0]][pos[1] + 1] == curVal - 1:
-                    grid_with_path[pos[0]][pos[1] + 1] = 3
+                    grid_with_path[pos[0]][pos[1] + 1] = breadthSearchedMaze[pos[0]][pos[1] + 1]
                     foundNextStep = True
                     pos = (pos[0], pos[1] + 1)
         return grid_with_path
@@ -189,11 +178,24 @@ def quickestPath(breadthSearchedMaze, pathlen):
 def solveMaze(inMaze, start=(0, 0)):
     solved, prepedMaze, pathlen = breadthFirstSolve(inMaze, start)
     if solved:
-        return quickestPath(prepedMaze, pathlen)
+        return (True, quickestPath(prepedMaze, pathlen))
     else:
-        return None
+        return (False, inMaze)
 
 
-print(solveMaze(testmaze, start=(0, 1)))
+if __name__ == "__main__":
+    testmaze = np.array([
+        [1, 10, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
+        [1, 0, 1, 0, 1, 0, 1, 0, 1, 1],
+        [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+        [1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+        [1, 0, 1, 1, 1, 0, 1, 1, 0, 1],
+        [1, 0, 1, 0, 1, 0, 2, 1, 0, 1],
+        [1, 0, 1, 0, 0, 0, 1, 1, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ])
+    print(solveMaze(testmaze, start=(0, 1)))
 
 

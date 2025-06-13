@@ -150,6 +150,6 @@ def solveMaze(inMaze, start=(0, 0)):
     return quickestPath(breadthFirstSolve(inMaze, start))
 
 
-print(solveMaze(testmaze, start=(0, 1)))
+#print(solveMaze(testmaze, start=(0, 1)))
 
 

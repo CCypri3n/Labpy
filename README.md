@@ -7,7 +7,7 @@ Mazes are represented as 2D-Numpy-Arrays containing integers:
 0 : no wall
 1 : wall
 2 : endpoint of the maze
-3 : starting tile
+10 : starting tile
 4 : unordered solution path
 11+ : the breadth-first search layers
 

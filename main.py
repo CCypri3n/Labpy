@@ -19,9 +19,6 @@ maze10 = np.array([
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ])
 
-maze4 = np.array([[1, 3, 1, 2], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])
-
-
 def main():
     # Initialize the display
     width, height = 700, 700
@@ -75,8 +72,6 @@ def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player =
         if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.flip()  # Update the display
         clock.tick(fps)
-
-
 
 def get_start(maze):
         # Find the starting position in the maze

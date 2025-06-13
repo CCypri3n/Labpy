@@ -109,6 +109,7 @@ def quickestPath(breadthSearchedMaze):
         curVal=0
         curPos=end
         while curVal != 10:
+            pass
 
 
 

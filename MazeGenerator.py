@@ -31,10 +31,9 @@ def genMaze(size, start):
     # Optionally, set entrance and exit
     maze[1][0] = 0  # Entrance
     maze[size-2][size-1] = 0  # Exit
-    maze[start["y"]][start["x"]]=10
+    maze[start[0]][start[1]]=10
     end = (random.randint(0, size), random.randint(0, size))
     maze[end[1]][end[0]]=2
-
     return maze
 
 

@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.sparse.csgraph import breadth_first_tree
 
 testmaze = np.array([
     [1, 3, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -125,6 +124,7 @@ def quickestPath(breadthSearchedMaze):
         raise ValueError("No end point found")
     else:
         pos = end
+
         while breadthSearchedMaze[pos[0]][pos[1]] != 10:
             curVal = breadthSearchedMaze[pos[0]][pos[1]]
             # UP

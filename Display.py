@@ -60,12 +60,13 @@ def display_maze(maze: np.array, cell_size: int):
             elif cell == 2:  # End
                 game.draw.rect(win, (255, 0, 0), rect)
 
-def display_solution(solution: np.array, cell_size: int):
+def display_solution(solution: np.array, cell_size: int, animationInt: int = 10):
     """_summary_
 
     Args:
         solution (np.array): The solution path of the maze.
         cell_size (int): The size of each cell in the maze.
+        animationInt (int, optional): The iteration count for the animation of the solution.
     """
     #print(f"Cell size: {cell_size}, Maze size: {len(solution)}x{len(solution[0])}, Maze: {solution}")
     for y, row in enumerate(solution):
@@ -75,13 +76,13 @@ def display_solution(solution: np.array, cell_size: int):
             rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
             if cell == 1:  # Wall
                 game.draw.rect(win, (0, 0, 0), rect)
-            elif cell == 0:  # Path
+            elif cell == 0 or cell > animationInt:  # Path or Unanimated solution
                 game.draw.rect(win, (255, 255, 255), rect)
             elif cell == 10:  # Start
                 game.draw.rect(win, (0, 255, 0), rect)
             elif cell == 2:  # End
                 game.draw.rect(win, (255, 0, 0), rect)
-            elif cell == 4 or cell >= 10: # Solution
+            elif cell == 4 or 10 < cell <= animationInt: # Solution
                 game.draw.rect(win, (0, 255, 255), rect)
 
 def display_player(player_pos: dict, cell_size: int):

@@ -37,5 +37,5 @@ def genMaze(size, start):
     return maze
 
 
-
-print(genMaze(20,(0,0)))
+if __name__ == "__main__":
+    print(genMaze(20,(0,0)))

@@ -37,10 +37,11 @@ def new_game(win: game.display, width: int, height: int, P1: Player.player):
     P1.new_game(maze)
 
     ## Set Variables
-    Display.display_maze.counter = 0.0
-    Display.display_solution.animationInt = 10
-    Display.display_solution.count = 0.0
-    win.fill((0, 0, 0))
+    Display.display_maze.counter = 0.0 ## Iteration count
+    Display.display_solution.animationInt = 10 ## Current solution path (Starts at ten, then increases)
+    Display.display_solution.count = 0.0 ## Iteration count
+    Display.display_win.animationInt = 0 ## Animation frame
+    Display.display_win.count = 0.0 ## Iteration count
     game.display.flip()
 
     play_loop(win, maze, cell_size, P1 if P1 else None)
@@ -95,20 +96,17 @@ def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player =
         clock.tick(fps)
 
 def win_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player):
-    i = 0
     running = True
+    oldRect = None
     while running:
         for event in game.event.get():
             if event.type == game.QUIT:
                 running = False
                 game.quit()
                 exit()
-        i += 1
-        running = False if i >= 60 else True
-        win.fill((0, 0, 0))  # Fill the screen with black
-        Display.display_win(maze, cell_size)
+        updateRect, running = Display.display_win(maze, cell_size)
         Display.display_player(P1.position, cell_size)  # Draw the player on the maze
-        game.display.flip()  # Update the display
+        game.display.update(updateRect)  # Update the display
         clock.tick(fps)
     new_game(win, width, height, P1)
 

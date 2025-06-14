@@ -45,7 +45,7 @@ def display_maze(maze: np.array, cell_size: int):
         cell_size (int): The size of each cell in the maze.
     """
     if len(maze) > display_maze.counter:
-        display_maze.counter += 1/(5) ## Count the iterations of this func for a nice animation, replaces y
+        display_maze.counter += 1/(2) ## Count the iterations of this func for a nice animation
     updateRect = game.Rect(len(maze[0]) * cell_size, display_maze.counter * cell_size, width, cell_size)
     for y, row in enumerate(maze):
         if y <= display_maze.counter:
@@ -99,7 +99,14 @@ def display_player(player_pos: dict, cell_size: int):
     return rect
 
 def display_win(maze: np.array, cell_size: int):
-    pass
+    if len(maze) > display_win.count:
+        display_win.count += 1/2
+    if display_win.count.is_integer():
+        display_win.animationInt += 1
+    updateRect = game.Rect(0, display_win.animationInt*cell_size, cell_size*len(maze[0]), cell_size)
+    game.draw.rect(win, (0, 0, 0), updateRect)
+    running = True if display_win.animationInt != len(maze) else False
+    return updateRect, running
 
 if __name__ == "__main__":
     main()

@@ -9,14 +9,15 @@ class player():
         self.path = None
         self.win = None
         self.goal = None
-        self.difficulty = 10
+        self.difficulty = 9 ## Starts with a size 9 maze
     
     def new_game(self, maze):
         self.maze = maze
         self.position = self.get_start()  # Starting position
+        self.goal = self.get_goal()
+        if self.path: print(self.path)
         self.path = []  # Path taken by the player
         self.win = False
-        self.goal = self.get_goal()
         self.difficulty += 1
 
     def get_start(self):
@@ -24,7 +25,7 @@ class player():
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
                 if cell == 10:
-                    return {"x":x, "y":y}
+                    return (y, x)
         raise Exception(f"Start position not found in the maze {self.maze}")
     
     def get_goal(self):
@@ -32,7 +33,7 @@ class player():
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
                 if cell == 2:
-                    return {"x":x, "y":y}
+                    return(y, x)
         raise Exception(f"End position not found in the maze {self.maze}")
 
     def move(self, key: game.event, maze: np.array = None):
@@ -46,23 +47,31 @@ class player():
         if type(maze) != np.array:
             maze = self.maze
         
-        x, y = self.position["x"], self.position["y"]
-        
+        y, x = self.position
         try:
             if key == game.K_LEFT:
-                if maze[self.position["y"]][self.position["x"]-1] != 1 and x > 0:
-                    self.position["x"] -= 1
+                if maze[y][x-1] != 1 and x > 0:
+                    x -= 1
+                    self.position = (y, x)
+                    self.path.append(self.position)
             if key == game.K_RIGHT:
-                if maze[self.position["y"]][self.position["x"]+1] != 1 and x < len(self.maze[0])-1:
-                    self.position["x"] += 1
+                if maze[y][x+1] != 1 and x < len(self.maze[0])-1:
+                    x += 1
+                    self.position = (y, x)
+                    self.path.append(self.position)
             if key == game.K_UP:
-                if maze[self.position["y"]-1][self.position["x"]] != 1 and y > 0:
-                    self.position["y"] -= 1
+                if maze[y-1][x] != 1 and y > 0:
+                    y -= 1
+                    self.position = (y, x)
+                    self.path.append(self.position)
             if key == game.K_DOWN:
-                if maze[self.position["y"]+1][self.position["x"]] != 1 and y < len(self.maze[1]):
-                    self.position["y"] += 1
+                if maze[y+1][x] != 1 and y < len(self.maze[1]):
+                    y += 1
+                    self.position = (y, x)
+                    self.path.append(self.position)
         except Exception as e:
             print(e)
+            return
 
     def update(self, key):
         self.move(key) if not self.win else None # Update player position based on input

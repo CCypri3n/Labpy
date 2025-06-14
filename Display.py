@@ -44,11 +44,11 @@ def display_maze(maze: np.array, cell_size: int):
         maze (np.array): The np.array representing the maze.
         cell_size (int): The size of each cell in the maze.
     """
-    if len(maze) > display_maze.counter:
-        display_maze.counter += 1/(2) ## Count the iterations of this func for a nice animation
-    updateRect = game.Rect(len(maze[0]) * cell_size, display_maze.counter * cell_size, width, cell_size)
+    if len(maze) > display_maze.count:
+        display_maze.count += 1/(2) ## Count the iterations of this func for a nice animation
+    updateRect = game.Rect(len(maze[0]) * cell_size, display_maze.count * cell_size, width, cell_size)
     for y, row in enumerate(maze):
-        if y <= display_maze.counter:
+        if y <= display_maze.count:
             for x, cell in enumerate(row):
                 rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
                 if cell == 1:  # Wall
@@ -85,15 +85,14 @@ def display_solution(solution: np.array, cell_size: int):
     return updateRects
 
 
-def display_player(player_pos: dict, cell_size: int):
+def display_player(player_pos: tuple, cell_size: int):
     """_summary_
 
     Args:
         player_pos (dict): The position of the player in the maze.
         cell_size (int): The size of each cell in the maze.
     """
-    x = player_pos["x"]
-    y = player_pos["y"]
+    y, x = player_pos
     rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
     game.draw.circle(win, (0, 0, 255), rect.center, cell_size/3)  # Draw player in blue
     return rect

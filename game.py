@@ -37,12 +37,11 @@ def new_game(win: game.display, width: int, height: int, P1: Player.player):
     P1.new_game(maze)
 
     ## Set Variables
-    Display.display_maze.counter = 0.0 ## Iteration count
+    Display.display_maze.count = 0.0 ## Iteration count
     Display.display_solution.animationInt = 10 ## Current solution path (Starts at ten, then increases)
     Display.display_solution.count = 0.0 ## Iteration count
     Display.display_win.animationInt = 0 ## Animation frame
     Display.display_win.count = 0.0 ## Iteration count
-    game.display.flip()
 
     play_loop(win, maze, cell_size, P1 if P1 else None)
 
@@ -50,7 +49,6 @@ def new_game(win: game.display, width: int, height: int, P1: Player.player):
     exit()
 
 def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player = None):
-    global animationInt
     running = True
     while running:
         for event in game.event.get():
@@ -61,13 +59,13 @@ def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.play
             elif event.type == game.KEYDOWN:
                 if event.key == game.K_SPACE:
                     running = False
-                    animationInt = solve_loop(win, maze, cell_size, P1 if P1 else None)
+                    solve_loop(win, maze, cell_size, P1 if P1 else None)
                     break
                 else:
                     if P1: maze = P1.update(event.key)
         win.fill((0, 0, 0))
         updateRect = Display.display_maze(maze, cell_size)
-        if P1 and len(maze)-1 <= Display.display_maze.counter: updateRect = Display.display_player(P1.position, cell_size)  # Draw the player on the maze
+        if P1 and len(maze)-1 <= Display.display_maze.count: updateRect = Display.display_player(P1.position, cell_size)  # Draw the player on the maze
         game.display.update()  # Update the display
         clock.tick(fps)
         if P1.win:
@@ -117,7 +115,7 @@ def get_start(maze):
             if cell == 10:
                 position = (y, x)
                 return position
-    Exception("Start position not found in the maze {maze}")
+    Exception("Start position not found in the maze: {maze}")
 
 def get_goal(maze):
         # Find the starting position in the maze
@@ -125,7 +123,7 @@ def get_goal(maze):
             for x, cell in enumerate(row):
                 if cell == 2:
                     return {"x":x, "y":y}
-        raise Exception("End position not found in the maze {maze}")
+        raise Exception("End position not found in the maze: {maze}")
 
 if __name__ == "__main__":
     import sys

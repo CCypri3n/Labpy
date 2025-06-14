@@ -24,9 +24,10 @@ def main(win: game.display, width: int, height: int, size: int = None, start: tu
     # Create a maze
     maze = MazeGen.genMaze(size, start) if size else maze10
     cell_size = min(width // len(maze[0]), height // len(maze))
+    print(maze, cell_size)
 
     ## Set Variables
-    Display.display_maze.counter = 0.0
+    Display.display_maze.count = 0.0
     Display.display_solution.animationInt = 10
     Display.display_solution.count = 0
     

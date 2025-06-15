@@ -15,10 +15,13 @@ class player():
         self.maze = maze
         self.position = self.get_start()  # Starting position
         self.goal = self.get_goal()
-        if self.path: print(self.path)
+        if self.path: print("Path taken for this level: ", self.path)
         self.path = []  # Path taken by the player
         self.win = False
-        self.difficulty += 1
+
+    def next_diff(self, inc: int):
+        self.difficulty += inc
+        return self.difficulty
 
     def get_start(self):
         # Find the starting position in the maze

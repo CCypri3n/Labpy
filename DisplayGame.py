@@ -8,17 +8,20 @@ class window:
         self.display_size = (board+side_menu, board)
         self._display = game.display.set_mode(self.display_size) ## Init game.display as _display
         game.display.set_caption(caption)
-        self.side_menu_size = (board, board)
+        self.side_menu_size = (side_menu, board)
         self.side_menu_topcorner = (board, 0)
         self.side_menu = game.Surface(self.side_menu_size)
         self.board_size = (board, board)
         self.board = game.Surface(self.board_size)
         self.cell_size = 0
+        self.level_font = freetype.SysFont("Arial", 20)
 
     def fill(self, color: tuple, surface: game.Surface):
         return surface.fill(color)
 
     def flip(self):
+        self._display.blit(self.board, (0, 0))
+        self._display.blit(self.side_menu, self.side_menu_topcorner)
         return game.display.flip()
     
     def update(self, rect: game.rect=None):
@@ -26,6 +29,12 @@ class window:
         self._display.blit(self.side_menu, self.side_menu_topcorner)
         return game.display.update(rect)
 
+    def renderLevelFont(self, level: str = "0"):
+        number_rect = self.level_font.get_rect(level)
+        print(self.side_menu.get_rect())
+        number_rect.center = (self.side_menu.get_rect().center[0], self.side_menu.get_rect().center[1]- self.side_menu_size[1]//2)
+
+        
 
 def main():
     win = init_display()
@@ -50,12 +59,11 @@ def main():
 
         win.fill((0, 0, 0), win.board)
         win.fill((50, 50, 50), win.side_menu)
-        
-        # --- Draw the maze onto the board surface ---
-        display_maze(win, maze)
+        win.renderLevelFont()
         
         
-        win.flip()  # or win.update()
+        
+        win.update()  # or win.update()
 
         clock.tick(60)
 
@@ -81,6 +89,11 @@ def init_display(caption: str = "Labpy", H: int = 700, side: int = 30):
 
     return win
 
+def init_level(win, P1):
+    win.fill((50, 50, 50), win.side_menu)
+    win.update()
+
+
 def display_maze(win: window, maze: np.array):
     """Displays the maze with a nice animation until completely loaded.
 
@@ -90,7 +103,7 @@ def display_maze(win: window, maze: np.array):
     """
     now = game.time.get_ticks()
     # Only update animationInt every 50 ms (20 times per second)
-    if now - display_maze.last_update > 50:
+    if now - display_maze.last_update > 50 and display_maze.count <= len(maze):
         display_maze.count += 1
         display_maze.last_update = now
     updateRect = game.Rect(0, 0, 600, display_maze.count*win.cell_size)
@@ -140,10 +153,9 @@ def display_player(win: window, P1: Player.player):
         player_pos (dict): The position of the player in the maze.
     """
     y, x = P1.position
-    rect = game.Rect((x *win.cell_size)-win.cell_size, (y *win.cell_size)-win.cell_size,win.cell_size*3,win.cell_size*3)
-    lastrect = game.Rect(P1.path[-2][1] *win.cell_size, P1.path[-2][0] *win.cell_size,win.cell_size,win.cell_size) if len(P1.path) > 1 else (game.Rect(P1.path[-1][1] *win.cell_size, P1.path[-1][0] *win.cell_size,win.cell_size,win.cell_size) if P1.path else None)
+    rect = game.Rect((x *win.cell_size)-win.cell_size, (y *win.cell_size)-win.cell_size, win.cell_size*3, win.cell_size*3)
     game.draw.circle(win.board, (0, 0, 255), rect.center,win.cell_size/3)  # Draw player in blue
-    return [rect, lastrect]
+    return rect
 
 def display_win(win: window, maze: np.array):
     now = game.time.get_ticks()

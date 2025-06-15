@@ -3,15 +3,15 @@ import pygame as game
 from pygame.locals import *
 
 class player():
-    def __init__(self):
+    def __init__(self, diff):
         self.maze = None
         self.position = None
-        self.path = None
-        self.win = None
+        self.path = []
         self.goal = None
-        self.difficulty = 9 ## Starts with a size 9 maze
+        self.win = False
+        self.difficulty = diff
     
-    def new_game(self, maze):
+    def next_level(self, maze):
         self.maze = maze
         self.position = self.get_start()  # Starting position
         self.goal = self.get_goal()
@@ -54,17 +54,17 @@ class player():
                     x -= 1
                     self.position = (y, x)
                     self.path.append(self.position)
-            if key == game.K_RIGHT:
+            elif key == game.K_RIGHT:
                 if maze[y][x+1] != 1 and x < len(self.maze[0])-1:
                     x += 1
                     self.position = (y, x)
                     self.path.append(self.position)
-            if key == game.K_UP:
+            elif key == game.K_UP:
                 if maze[y-1][x] != 1 and y > 0:
                     y -= 1
                     self.position = (y, x)
                     self.path.append(self.position)
-            if key == game.K_DOWN:
+            elif key == game.K_DOWN:
                 if maze[y+1][x] != 1 and y < len(self.maze[1]):
                     y += 1
                     self.position = (y, x)
@@ -79,5 +79,4 @@ class player():
         return self.maze
     
     def followSol(self, solution: np.array):
-        y, x = self.position["y"], self.position["x"]
         pass

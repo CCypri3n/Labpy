@@ -19,11 +19,19 @@ maze10 = np.array([
     [1, 0, 1, 0, 0, 0, 1, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ])
-
-def new_game(win: game.display, width: int, height: int, P1: Player.player):
-    # Create a maze
     
-    size = P1.difficulty
+def new_game(win: game.display, width: int, height: int):
+    # Create a maze
+    startdifficulty = 9
+    P1 = Player.player(startdifficulty)
+    
+    next_level(win, width, height, P1)
+
+    game.quit()
+    exit()
+
+def next_level(win: game.display, width: int, height: int, P1: Player.player):
+    size = P1.difficulty+1 ## Add +1 to old difficulty, in order to generate correct maze.
     while True:
         try:
             maze = MazeGen.genMaze(size, (random.choice(range(0, size-1)), random.choice(range(0, size-1))))
@@ -32,9 +40,8 @@ def new_game(win: game.display, width: int, height: int, P1: Player.player):
             break
         except:
             continue
-
+    P1.next_level(maze) ## Update difficulty, reset variables and update maze and positions.
     cell_size = min(width // len(maze[0]), height // len(maze))
-    P1.new_game(maze)
 
     ## Set Variables
     Display.display_maze.count = 0.0 ## Iteration count
@@ -44,9 +51,6 @@ def new_game(win: game.display, width: int, height: int, P1: Player.player):
     Display.display_win.count = 0.0 ## Iteration count
 
     play_loop(win, maze, cell_size, P1 if P1 else None)
-
-    game.quit()
-    exit()
 
 def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player = None):
     running = True
@@ -63,10 +67,9 @@ def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.play
                     break
                 else:
                     if P1: maze = P1.update(event.key)
-        win.fill((0, 0, 0))
         updateRect = Display.display_maze(maze, cell_size)
-        if P1 and len(maze)-1 <= Display.display_maze.count: updateRect = Display.display_player(P1.position, cell_size)  # Draw the player on the maze
-        game.display.update()  # Update the display
+        if P1 and len(maze)-1 <= Display.display_maze.count: updateRect = Display.display_player(P1, cell_size)  # Draw the player on the maze
+        game.display.update(updateRect)  # Update the display
         clock.tick(fps)
         if P1.win:
             running = False
@@ -89,7 +92,7 @@ def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player =
                     play_loop(win, maze, cell_size, P1 if P1 else None)
                     break
         updateRect = Display.display_solution(solutionTuple[1], cell_size)
-        if P1: Display.display_player(P1.position, cell_size)  # Draw the player on the maze
+        if P1: Display.display_player(P1, cell_size)  # Draw the player on the maze
         game.display.update(updateRect if updateRect else game.Rect(0, 0, width, height))  # Update the display
         clock.tick(fps)
 
@@ -103,10 +106,12 @@ def win_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.playe
                 game.quit()
                 exit()
         updateRect, running = Display.display_win(maze, cell_size)
-        Display.display_player(P1.position, cell_size)  # Draw the player on the maze
+        Display.display_player(P1, cell_size)  # Draw the player on the maze
         game.display.update(updateRect)  # Update the display
         clock.tick(fps)
-    new_game(win, width, height, P1)
+    win.fill((0, 0, 0))
+    game.display.flip()
+    next_level(win, width, height, P1)
 
 def get_start(maze):
     # Find the starting position in the maze
@@ -122,8 +127,8 @@ def get_goal(maze):
         for y, row in enumerate(maze):
             for x, cell in enumerate(row):
                 if cell == 2:
-                    return {"x":x, "y":y}
-        raise Exception("End position not found in the maze: {maze}")
+                    return (y, x)
+        Exception("End position not found in the maze: {maze}")
 
 if __name__ == "__main__":
     import sys
@@ -132,5 +137,4 @@ if __name__ == "__main__":
     clock = game.time.Clock()
     width, height = 700, 700
     win = Display.init_display(caption="Labpy", H=height, W=width)
-    P1 = Player.player()
-    new_game(win, width, height, P1)
+    new_game(win, width, height)

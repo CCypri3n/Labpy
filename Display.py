@@ -1,5 +1,7 @@
 import pygame as game
+import pygame.freetype as freetype
 import numpy as np
+import Player
 
 height, width = 600, 600
 
@@ -35,6 +37,9 @@ def init_display(caption: str = "Labpy", H: int = height, W: int = width):
     global win
     win = game.display.set_mode((W, H))
     game.display.set_caption(caption)
+
+    display_win.last_update = game.time.get_ticks()
+
     return win
 
 def display_maze(maze: np.array, cell_size: int):
@@ -85,27 +90,32 @@ def display_solution(solution: np.array, cell_size: int):
     return updateRects
 
 
-def display_player(player_pos: tuple, cell_size: int):
+def display_player(P1: Player.player, cell_size: int):
     """_summary_
 
     Args:
         player_pos (dict): The position of the player in the maze.
         cell_size (int): The size of each cell in the maze.
     """
-    y, x = player_pos
-    rect = game.Rect(x * cell_size, y * cell_size, cell_size, cell_size)
+    y, x = P1.position
+    rect = game.Rect((x * cell_size)-cell_size, (y * cell_size)-cell_size, cell_size*3, cell_size*3)
+    lastrect = game.Rect(P1.path[-2][1] * cell_size, P1.path[-2][0] * cell_size, cell_size, cell_size) if len(P1.path) > 1 else (game.Rect(P1.path[-1][1] * cell_size, P1.path[-1][0] * cell_size, cell_size, cell_size) if P1.path else None)
     game.draw.circle(win, (0, 0, 255), rect.center, cell_size/3)  # Draw player in blue
-    return rect
+    return [rect, lastrect]
 
 def display_win(maze: np.array, cell_size: int):
-    if len(maze) > display_win.count:
-        display_win.count += 1/2
-    if display_win.count.is_integer():
+    now = game.time.get_ticks()
+    # Only update animationInt every 50 ms (20 times per second)
+    if now - display_win.last_update > 50:
         display_win.animationInt += 1
-    updateRect = game.Rect(0, display_win.animationInt*cell_size, cell_size*len(maze[0]), cell_size)
+        display_win.last_update = now
+    updateRect = game.Rect(0, display_win.animationInt * cell_size, cell_size * len(maze[0]), cell_size)
     game.draw.rect(win, (0, 0, 0), updateRect)
-    running = True if display_win.animationInt != len(maze) else False
+    running = display_win.animationInt != len(maze)
     return updateRect, running
+
+
+
 
 if __name__ == "__main__":
     main()

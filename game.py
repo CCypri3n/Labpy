@@ -2,7 +2,7 @@ import numpy as np
 import pygame as game
 import random
 
-import Display as Display
+import DisplayGame as Display
 import Player as Player
 import MazeSolver as MazeSol
 import MazeGenerator as MazeGen
@@ -19,18 +19,21 @@ maze10 = np.array([
     [1, 0, 1, 0, 0, 0, 1, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ])
-    
-def new_game(win: game.display, width: int, height: int):
+
+# class maze:
+# class game:
+
+def new_game(win: Display.window):
     # Create a maze
     startdifficulty = 9
     P1 = Player.player(startdifficulty)
     
-    next_level(win, width, height, P1)
+    next_level(win, P1)
 
     game.quit()
     exit()
 
-def next_level(win: game.display, width: int, height: int, P1: Player.player):
+def next_level(win: Display.window, P1: Player.player):
     size = P1.difficulty+1 ## Add +1 to old difficulty, in order to generate correct maze.
     while True:
         try:
@@ -41,7 +44,7 @@ def next_level(win: game.display, width: int, height: int, P1: Player.player):
         except:
             continue
     P1.next_level(maze) ## Update difficulty, reset variables and update maze and positions.
-    cell_size = min(width // len(maze[0]), height // len(maze))
+    win.cell_size = min(win.board_size[1] // len(maze[0]), win.board_size[0] // len(maze))
 
     ## Set Variables
     Display.display_maze.count = 0.0 ## Iteration count
@@ -50,9 +53,9 @@ def next_level(win: game.display, width: int, height: int, P1: Player.player):
     Display.display_win.animationInt = 0 ## Animation frame
     Display.display_win.count = 0.0 ## Iteration count
 
-    play_loop(win, maze, cell_size, P1 if P1 else None)
+    play_loop(win, maze, P1 if P1 else None)
 
-def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player = None):
+def play_loop(win: Display.window, maze: np.array, P1: Player.player):
     running = True
     while running:
         for event in game.event.get():
@@ -63,20 +66,20 @@ def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.play
             elif event.type == game.KEYDOWN:
                 if event.key == game.K_SPACE:
                     running = False
-                    solve_loop(win, maze, cell_size, P1 if P1 else None)
+                    solve_loop(win, maze, P1 if P1 else None)
                     break
                 else:
                     if P1: maze = P1.update(event.key)
-        updateRect = Display.display_maze(maze, cell_size)
-        if P1 and len(maze) < Display.display_maze.count: updateRect = Display.display_player(P1, cell_size)  # Draw the player on the maze
-        game.display.update(updateRect)  # Update the display
+        updateRect = Display.display_maze(win, maze)
+        if P1 and len(maze) < Display.display_maze.count: updateRect = Display.display_player(win, P1)  # Draw the player on the maze
+        win.update(updateRect)  # Update the display
         clock.tick(fps)
         if P1.win:
             running = False
 
-    win_loop(win, maze, cell_size, P1)
+    win_loop(win, maze, P1)
 
-def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player = None):
+def solve_loop(win: Display.window, maze: np.array, P1: Player.player):
     solutionTuple = (0, 0)
     solutionTuple = MazeSol.solveMaze(maze, get_start(maze))
     running = True
@@ -89,14 +92,14 @@ def solve_loop(win: game.display, maze: np.array, cell_size, P1: Player.player =
             elif event.type == game.KEYDOWN:
                 if event.key == game.K_SPACE:
                     running = False
-                    play_loop(win, maze, cell_size, P1 if P1 else None)
+                    play_loop(win, maze, P1 if P1 else None)
                     break
-        updateRect = Display.display_solution(solutionTuple[1], cell_size)
-        if P1: Display.display_player(P1, cell_size)  # Draw the player on the maze
-        game.display.update(updateRect if updateRect else game.Rect(0, 0, width, height))  # Update the display
+        updateRect = Display.display_solution(win, solutionTuple[1])
+        if P1: Display.display_player(win, P1)  # Draw the player on the maze
+        win.update(updateRect if updateRect else None)  # Update the display
         clock.tick(fps)
 
-def win_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.player):
+def win_loop(win: Display.window, maze: np.array, P1: Player.player):
     running = True
     oldRect = None
     while running:
@@ -105,14 +108,13 @@ def win_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.playe
                 running = False
                 game.quit()
                 exit()
-        updateRect, running = Display.display_win(maze, cell_size)
-        print(updateRect, running)
-        Display.display_player(P1, cell_size)  # Draw the player on the maze
-        game.display.update(updateRect)  # Update the display
+        updateRect, running = Display.display_win(win, maze)
+        Display.display_player(win, P1)  # Draw the player on the maze
+        win.update(updateRect)  # Update the display
         clock.tick(fps)
-    win.fill((0, 0, 0))
+    win.fill((0, 0, 0), win.board)
     game.display.flip()
-    next_level(win, width, height, P1)
+    next_level(win, P1)
 
 def get_start(maze):
     # Find the starting position in the maze
@@ -136,6 +138,7 @@ if __name__ == "__main__":
     sys.setrecursionlimit(5000)
     fps = 60
     clock = game.time.Clock()
-    width, height = 700, 700
-    win = Display.init_display(caption="Labpy", H=height, W=width)
-    new_game(win, width, height)
+    board = 700
+    side_menu = 30
+    win = Display.init_display(caption="Labpy", H=board, side=side_menu)
+    new_game(win)

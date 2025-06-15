@@ -2,7 +2,7 @@ import numpy as np
 import pygame as game
 import random
 
-import Display as Display
+import DisplayAlgorithm as Display
 import Player as Player
 import MazeSolver as MazeSol
 import MazeGenerator as MazeGen

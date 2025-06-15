@@ -16,6 +16,10 @@ Mazes are represented as 2D-Numpy-Arrays containing integers:
 
 Coordinates are generally to be passed on as tuples in the (y,x) format.
 
+## Visuals
+
+- Width of side-menu: 30
+
 ## TODO - Cyprien
 
 - Change velocity of Player depending on length of keyhold

@@ -68,7 +68,7 @@ def play_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.play
                 else:
                     if P1: maze = P1.update(event.key)
         updateRect = Display.display_maze(maze, cell_size)
-        if P1 and len(maze)-1 <= Display.display_maze.count: updateRect = Display.display_player(P1, cell_size)  # Draw the player on the maze
+        if P1 and len(maze) < Display.display_maze.count: updateRect = Display.display_player(P1, cell_size)  # Draw the player on the maze
         game.display.update(updateRect)  # Update the display
         clock.tick(fps)
         if P1.win:
@@ -106,6 +106,7 @@ def win_loop(win: game.display, maze: np.array, cell_size: int, P1: Player.playe
                 game.quit()
                 exit()
         updateRect, running = Display.display_win(maze, cell_size)
+        print(updateRect, running)
         Display.display_player(P1, cell_size)  # Draw the player on the maze
         game.display.update(updateRect)  # Update the display
         clock.tick(fps)

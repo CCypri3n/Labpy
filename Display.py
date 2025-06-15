@@ -3,8 +3,6 @@ import pygame.freetype as freetype
 import numpy as np
 import Player
 
-height, width = 600, 600
-
 def main():
     win = init_display()
     clock = game.time.Clock()
@@ -22,13 +20,13 @@ def main():
 
     game.quit()
 
-def init_display(caption: str = "Labpy", H: int = height, W: int = width):
-    """_summary_
+def init_display(caption: str = "Labpy", H: int = 600, W: int = 600):
+    """Initalize the display and function attributes.
 
     Args:
         caption (str, optional): The caption for the pygame window. Defaults to "Labpy".
-        H (int, optional): The height of the pygame window. Defaults to HEIGHT.
-        W (int, optional): The width of the pygame window. Defaults to WIDTH.
+        H (int, optional): The height of the pygame window. Defaults to 600.
+        W (int, optional): The width of the pygame window. Defaults to 600.
 
     Returns:
         _type_: The pygame window object.
@@ -39,6 +37,7 @@ def init_display(caption: str = "Labpy", H: int = height, W: int = width):
     game.display.set_caption(caption)
 
     display_win.last_update = game.time.get_ticks()
+    display_maze.last_update = game.time.get_ticks()
 
     return win
 
@@ -49,9 +48,12 @@ def display_maze(maze: np.array, cell_size: int):
         maze (np.array): The np.array representing the maze.
         cell_size (int): The size of each cell in the maze.
     """
-    if len(maze) > display_maze.count:
-        display_maze.count += 1/(2) ## Count the iterations of this func for a nice animation
-    updateRect = game.Rect(len(maze[0]) * cell_size, display_maze.count * cell_size, width, cell_size)
+    now = game.time.get_ticks()
+    # Only update animationInt every 50 ms (20 times per second)
+    if now - display_maze.last_update > 50:
+        display_maze.count += 1
+        display_maze.last_update = now
+    updateRect = game.Rect(0, 0, 600, display_maze.count*cell_size)
     for y, row in enumerate(maze):
         if y <= display_maze.count:
             for x, cell in enumerate(row):
@@ -109,7 +111,8 @@ def display_win(maze: np.array, cell_size: int):
     if now - display_win.last_update > 50:
         display_win.animationInt += 1
         display_win.last_update = now
-    updateRect = game.Rect(0, display_win.animationInt * cell_size, cell_size * len(maze[0]), cell_size)
+    updateRect = game.Rect(0, 0, win.get_width(), display_win.animationInt*cell_size)
+    print(updateRect)
     game.draw.rect(win, (0, 0, 0), updateRect)
     running = display_win.animationInt != len(maze)
     return updateRect, running
